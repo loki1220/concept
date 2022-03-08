@@ -40,6 +40,9 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  pinput: ^2.1.4
+
+
   flutter_test:
     sdk: flutter
 

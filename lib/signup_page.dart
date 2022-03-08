@@ -1,3 +1,5 @@
+import 'package:concept/otp_page.dart';
+import 'package:concept/widget/mytextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,129 +14,19 @@ class _SignupPageState extends State<SignupPage> {
   // form key
   final _formKey = GlobalKey<FormState>();
 
-  final emailEditingController = TextEditingController();
-  final passwordEditingController = TextEditingController();
-  final confirmPasswordEditingController = TextEditingController();
+  final numEditingController = TextEditingController();
 
   bool _isLoading = false;
 
-  bool _secureText = true;
-  bool _securityText = true;
-
   @override
   Widget build(BuildContext context) {
-    //email field
-    final emailField = TextFormField(
-      autofocus: false,
-      controller: emailEditingController,
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Please Enter Your Email");
-        }
-        // reg expression for email validation
-        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-          return ("Please Enter a valid email");
-        }
-        return null;
-      },
-      // onSaved: (value) {
-      //   fullNameEditingController.text = value!;
-      // },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        hintText: "Enter email/mobile number ",
-      ),
-    );
-
-    //password field
-    final passwordField = TextFormField(
-      autofocus: false,
-      controller: passwordEditingController,
-      obscureText: _secureText,
-      validator: (value) {
-        RegExp regex = new RegExp(
-            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
-        if (value!.isEmpty) {
-          return ("Password is required for login");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Enter (Min. 8 letter, 1 Caps letter, 1 special letter, 1 Num)");
-        }
-      },
-      // onSaved: (value) {
-      //   fullNameEditingController.text = value!;
-      // },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        suffixIcon: IconButton(
-          icon: Icon(_secureText
-              ? Icons.panorama_fish_eye_sharp
-              : Icons.remove_red_eye),
-          onPressed: () {
-            setState(() {
-              _secureText = !_secureText;
-            });
-          },
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        hintText: "Enter password",
-      ),
-    );
-
-    //confirm password field
-    final confirmPasswordField = TextFormField(
-      autofocus: false,
-      controller: confirmPasswordEditingController,
-      obscureText: _securityText,
-      validator: (value) {
-        if (confirmPasswordEditingController.text !=
-            passwordEditingController.text) {
-          return "Password don't match";
-        }
-        return null;
-      },
-      // onSaved: (value) {
-      //   confirmPasswordEditingController.text = value!;
-      // },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        suffixIcon: IconButton(
-          icon: Icon(_securityText
-              ? Icons.panorama_fish_eye_sharp
-              : Icons.remove_red_eye),
-          onPressed: () {
-            setState(() {
-              _securityText = !_securityText;
-            });
-          },
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        hintText: "Confirm Password",
-      ),
-    );
-
     //registerbutton
     final registerButton = Material(
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        width: 6 * MediaQuery.of(context).size.width / 9,
+        width: 6 * MediaQuery.of(context).size.width / 12,
+        height: 45,
+        //height: 2 * MediaQuery.of(context).size.height / 38,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
@@ -147,8 +39,14 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ),
         child: MaterialButton(
-            // padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Otp_Page(),
+                ),
+              );
+            },
             child: Container(
               child: _isLoading
                   ? const Center(
@@ -157,10 +55,10 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     )
                   : Text(
-                      "Register",
+                      "Next",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.roboto(
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFFFFFFF)),
                     ),
@@ -168,38 +66,31 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bgregister.png"),
-            fit: BoxFit.fill,
+    return SafeArea(
+      child: Scaffold(
+        //resizeToAvoidBottomInset: true,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/bgregister.png"),
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: Container(
-          //color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50, right: 36.0, left: 36.0),
-            child: Form(
-              key: _formKey,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Column(
                     children: <Widget>[
                       Text(
-                        "Hello Concept ",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF000000)),
-                      ),
-                      Text(
-                        " maker",
+                        "Hello Concept \n maker",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.roboto(
                             fontSize: 28,
@@ -210,15 +101,7 @@ class _SignupPageState extends State<SignupPage> {
                         height: 20,
                       ),
                       Text(
-                        "Welcome to the world",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                            fontSize: 19,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF1F1F1F)),
-                      ),
-                      Text(
-                        "of concepts!",
+                        "Welcome to the world \n of concepts!",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.roboto(
                             fontSize: 19,
@@ -227,13 +110,26 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ],
                   ),
+                  MyTextField(
+                    isCenter: true,
+                    controller: numEditingController,
+                    fieldname: "Enter the mobile number",
+                    keyboardType: TextInputType.number,
+                    maxLength: 10,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ("Please enter a number");
+                      }
+                      ;
+                      if (value.length < 10) {
+                        return ("Enter 10 digits");
+                      }
+                    },
+                    onSaved: (value) {
+                      numEditingController.text = value!;
+                    },
+                  ),
                   SizedBox(height: 50),
-                  emailField,
-                  SizedBox(height: 25),
-                  passwordField,
-                  SizedBox(height: 25),
-                  confirmPasswordField,
-                  SizedBox(height: 40),
                   registerButton,
                 ],
               ),
