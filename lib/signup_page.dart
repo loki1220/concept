@@ -1,5 +1,6 @@
 import 'package:concept/otp_page.dart';
 import 'package:concept/widget/mytextfield.dart';
+import 'package:concept/widget/numeric_pad.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -43,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Otp_Page(),
+                  builder: (context) => OTP(),
                 ),
               );
             },
@@ -116,6 +117,10 @@ class _SignupPageState extends State<SignupPage> {
                     fieldname: "Enter the mobile number",
                     keyboardType: TextInputType.number,
                     maxLength: 10,
+                    // prefix: Text(
+                    //   "(+91)",
+                    //   style: TextStyle(color: Colors.black),
+                    // ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return ("Please enter a number");

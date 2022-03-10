@@ -65,6 +65,8 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             Container(
                               height: 45,
+                              width:
+                                  6 * (MediaQuery.of(context).size.width / 17),
                               decoration: ShapeDecoration(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.horizontal(
@@ -73,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                                 gradient: LinearGradient(
                                   colors: <Color>[
                                     Color(0xFFE074DC),
-                                    Color(0xFFF133E9),
+                                    //Color(0xFFF133E9),
                                     Color(0xFFFE00F4),
                                   ],
                                 ),
@@ -111,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               height: 45,
                               width:
-                                  6 * (MediaQuery.of(context).size.width / 19),
+                                  6 * (MediaQuery.of(context).size.width / 17),
                               // margin: EdgeInsets.only(
                               //     top: 100, bottom: 5, left: 0, right: 1),
                               decoration: ShapeDecoration(

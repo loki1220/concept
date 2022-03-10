@@ -13,6 +13,8 @@ class MyTextField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final String? prefixText;
+  final Widget? prefix;
 
   final bool isCenter;
 
@@ -30,6 +32,8 @@ class MyTextField extends StatelessWidget {
     this.fieldname,
     required this.isCenter,
     this.maxLength,
+    this.prefixText,
+    this.prefix,
   }) : super(key: key);
 
   @override
@@ -76,6 +80,8 @@ class MyTextField extends StatelessWidget {
             decoration: InputDecoration(
               counterText: "",
               suffixIcon: suffixbutton,
+              prefixText: prefixText,
+              prefix: prefix,
               filled: true,
               fillColor: Colors.white.withOpacity(0.8),
               contentPadding: EdgeInsets.symmetric(

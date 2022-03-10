@@ -1,4 +1,5 @@
 import 'package:concept/forgetpass.dart';
+import 'package:concept/otp_page.dart';
 import 'package:concept/signup_page.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -131,7 +132,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: MaterialButton(
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Otp_Page(),
+                ),
+              );
+            },
             child: Container(
               child: _isLoading
                   ? const Center(
@@ -203,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         MyTextField(
                           isCenter: false,
-                          txt: "Enter the username",
+                          txt: "Username",
                           controller: emailController,
                         ),
                         MyTextField(
