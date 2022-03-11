@@ -92,6 +92,7 @@ class _Otp_PageState extends State<Otp_Page> {
     );
   }
 
+/*
   Widget _buildContainer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -219,6 +220,7 @@ class _Otp_PageState extends State<Otp_Page> {
       ],
     );
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -263,44 +265,51 @@ class _Otp_PageState extends State<Otp_Page> {
               "assets/bg.png",
               fit: BoxFit.fill,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  "Enter OTP",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1F1F1F)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _textFieldOTP(first: true, last: false),
-                    _textFieldOTP(first: false, last: false),
-                    _textFieldOTP(first: false, last: false),
-                    _textFieldOTP(first: false, last: false),
-                    _textFieldOTP(first: false, last: false),
-                    _textFieldOTP(first: false, last: true),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      "Haven't received a code yet?",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF000000)),
-                    ),
-                    _sendagain(),
-                  ],
-                ),
-                verifyButton,
-                Container(child: _buildContainer()),
-              ],
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    "Enter OTP",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1F1F1F)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _textFieldOTP(first: true, last: false),
+                      _textFieldOTP(first: false, last: false),
+                      _textFieldOTP(first: false, last: false),
+                      _textFieldOTP(first: false, last: false),
+                      _textFieldOTP(first: false, last: false),
+                      _textFieldOTP(first: false, last: true),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Haven't received a code yet?",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.roboto(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF000000)),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _sendagain(),
+                    ],
+                  ),
+                  verifyButton,
+                ],
+              ),
             ),
           ],
         ),

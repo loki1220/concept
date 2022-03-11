@@ -1,3 +1,4 @@
+import 'package:concept/details.dart';
 import 'package:concept/forgetpass.dart';
 import 'package:concept/otp_page.dart';
 import 'package:concept/signup_page.dart';
@@ -136,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Otp_Page(),
+                  builder: (context) => Details(),
                 ),
               );
             },
@@ -210,11 +211,13 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         MyTextField(
+                          obscureText: false,
                           isCenter: false,
                           txt: "Username",
                           controller: emailController,
                         ),
                         MyTextField(
+                          obscureText: false,
                           isCenter: false,
                           txt: "Password",
                           controller: passwordController,

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:concept/details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         splashIconSize: double.maxFinite,
         centered: true,
         splashTransition: SplashTransition.fadeTransition,
-        nextScreen: HomePage(),
+        nextScreen: Details(),
       ),
     );
   }

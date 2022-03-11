@@ -1,6 +1,5 @@
 import 'package:concept/otp_page.dart';
 import 'package:concept/widget/mytextfield.dart';
-import 'package:concept/widget/numeric_pad.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -44,7 +43,7 @@ class _SignupPageState extends State<SignupPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OTP(),
+                  builder: (context) => Otp_Page(),
                 ),
               );
             },
@@ -112,6 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                   MyTextField(
+                    obscureText: false,
                     isCenter: true,
                     controller: numEditingController,
                     fieldname: "Enter the mobile number",

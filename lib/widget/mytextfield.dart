@@ -17,6 +17,7 @@ class MyTextField extends StatelessWidget {
   final Widget? prefix;
 
   final bool isCenter;
+  final bool obscureText;
 
   final FormFieldSetter<String>? onSaved;
 
@@ -34,6 +35,7 @@ class MyTextField extends StatelessWidget {
     this.maxLength,
     this.prefixText,
     this.prefix,
+    required this.obscureText,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,7 @@ class MyTextField extends StatelessWidget {
             /*TextInputType.emailAddress,*/
             validator: validator,
             maxLength: maxLength,
+            obscureText: obscureText,
             /*(value) {
               if (value!.isEmpty) {
                 return ("Please Enter Your Email");
@@ -88,11 +91,11 @@ class MyTextField extends StatelessWidget {
                   vertical: 10, horizontal: isCenter ? 0 : 15),
               border: InputBorder.none,
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(45),
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(45),
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
               ),
               hintText: fieldname,

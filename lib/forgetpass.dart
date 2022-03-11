@@ -127,6 +127,7 @@ class _ForgetpassState extends State<Forgetpass> {
                                   color: Color(0xFF1F1F1F)),
                             ),
                             MyTextField(
+                              obscureText: false,
                               isCenter: true,
                               txt: "Phone number or email address",
                               controller: emailController,
