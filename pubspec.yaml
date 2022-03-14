@@ -27,20 +27,27 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter:
-    sdk: flutter
-
   animated_splash_screen: ^1.2.0
   font_awesome_flutter: ^9.2.0
   google_fonts: ^2.3.1
+  flutter:
+    sdk: flutter
 
+  pinput: ^2.1.4
+  syncfusion_flutter_sliders: ^19.4.55
+  syncfusion_flutter_core: ^19.4.55
+  image_picker: ^0.8.4+4
+  path_provider: ^2.0.9
+  path: ^1.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  pinput: ^2.1.4
+
+
+
 
 
   flutter_test:

@@ -137,7 +137,9 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Details(),
+                  builder: (context) => Details(
+                    assetImage: 'assets/sliderstar.png',
+                  ),
                 ),
               );
             },
@@ -217,14 +219,14 @@ class _LoginPageState extends State<LoginPage> {
                           controller: emailController,
                         ),
                         MyTextField(
-                          obscureText: false,
+                          obscureText: _secureText,
                           isCenter: false,
                           txt: "Password",
                           controller: passwordController,
                           suffixbutton: IconButton(
                             icon: Icon(_secureText
-                                ? Icons.panorama_fish_eye_sharp
-                                : Icons.remove_red_eye),
+                                ? Icons.visibility_off
+                                : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 _secureText = !_secureText;
