@@ -5,22 +5,18 @@ class GradientIcon extends StatelessWidget {
     this.icon,
     this.size,
     this.gradient,
-    this.width,
-    this.height,
   );
 
   final IconData icon;
   final double size;
   final Gradient gradient;
-  final double? width;
-  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
       child: SizedBox(
-        width: width,
-        height: height,
+        width: size * 1.2,
+        height: size * 1.2,
         child: Icon(
           icon,
           size: size,

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:concept/details.dart';
+import 'package:concept/feed_screen.dart';
 import 'package:concept/layouts/mobile_screen_layout.dart';
 import 'package:concept/login_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: AnimatedSplashScreen(
         duration: 3000,
         splash: Stack(
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
         splashIconSize: double.maxFinite,
         centered: true,
         splashTransition: SplashTransition.fadeTransition,
-        nextScreen: HomePage(),
+        nextScreen: FeedScreen(),
       ),
     );
   }

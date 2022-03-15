@@ -1,8 +1,7 @@
-import 'package:concept/widget/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../widget/global_variables.dart';
+import '../widget/gradient_icon.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);

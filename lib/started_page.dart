@@ -67,7 +67,13 @@ class _Started_PageState extends State<Started_Page> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
-                children: [Image.asset("assets/started.png")],
+                children: [
+                  Image.asset(
+                    "assets/started.png",
+                    width: 180,
+                    height: 180,
+                  )
+                ],
               ),
               Column(
                 children: [
