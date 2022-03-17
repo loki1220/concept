@@ -1,8 +1,9 @@
-import 'package:concept/add_image_video.dart';
+import 'package:concept/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -68,11 +69,16 @@ class _FeedScreenState extends State<FeedScreen> {
           // ),
         ),
         child: MaterialButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CardPicture()));
+          onPressed: () async {
+// ### Add the next 2 lines ###
+            final permitted = await PhotoManager.requestPermissionExtend();
+            if (permitted == true) return;
+// ######
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => Gallery()),
+            );
           },
-          // async {
+          //     async {
           //   Navigator.of(context).pop();
           //   final pickedFile =
           //       await picker.pickImage(source: ImageSource.gallery);

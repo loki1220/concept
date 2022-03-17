@@ -1,6 +1,7 @@
 import 'package:concept/layouts/mobile_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class Started_Page extends StatefulWidget {
   const Started_Page({Key? key}) : super(key: key);
@@ -75,27 +76,15 @@ class _Started_PageState extends State<Started_Page> {
                   )
                 ],
               ),
-              Column(
-                children: [
-                  Text(
-                    " Mart is all set to enter the ",
-                    style: GoogleFonts.mansalva(
-                      color: Color(0xFF0099D6),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.48,
-                      wordSpacing: 2,
-                    ),
-                  ),
-                  Text(
-                    " magical concept of learning!",
-                    style: GoogleFonts.mansalva(
-                      color: Color(0xFFEE00F3),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20.48,
-                      wordSpacing: 2,
-                    ),
-                  ),
-                ],
+              GradientText(
+                " Mart is all set to enter the \n  magical concept of learning!",
+                style: GoogleFonts.mansalva(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 20.48,
+                  wordSpacing: 2,
+                ),
+                colors: <Color>[Color(0xFF0099D6), Color(0xFFEE00F3)],
+                gradientDirection: GradientDirection.ttb,
               ),
               _startbutton(),
             ],
