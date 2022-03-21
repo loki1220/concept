@@ -86,71 +86,75 @@ class _ForgetpassState extends State<Forgetpass> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/bglogin.png"),
-                fit: BoxFit.fill,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/bglogin.png"),
+                  fit: BoxFit.fill,
+                ),
               ),
-            ),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/lock.png"),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Container(
-                        height: 450,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Trouble in logging in?",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                  height: 2,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF000000)),
-                            ),
-                            Text(
-                              "Enter your username or email address and \n we’ll send you a link to get back to your \n account. ",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF1F1F1F)),
-                            ),
-                            MyTextField(
-                              obscureText: false,
-                              isCenter: true,
-                              txt: "Phone number or email address",
-                              controller: emailController,
-                              fieldname: "Phone number or email address",
-                            ),
-                            forgetButton,
-                            Text(
-                              "Need more help?",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF514860)),
-                            ),
-                            _facebookButton(),
-                            _backtologin(),
-                          ],
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/lock.png"),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Container(
+                          height: 450,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "Trouble in logging in?",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    height: 2,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF000000)),
+                              ),
+                              Text(
+                                "Enter your username or email address and \n we’ll send you a link to get back to your \n account. ",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFF1F1F1F)),
+                              ),
+                              MyTextField(
+                                autofocus: false,
+                                obscureText: false,
+                                isCenter: true,
+                                txt: "Phone number or email address",
+                                controller: emailController,
+                                fieldname: "Phone number or email address",
+                              ),
+                              forgetButton,
+                              Text(
+                                "Need more help?",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFF514860)),
+                              ),
+                              _facebookButton(),
+                              _backtologin(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

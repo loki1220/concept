@@ -1,19 +1,16 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:concept/details.dart';
-import 'package:concept/feed_screen.dart';
-import 'package:concept/gallery.dart';
-import 'package:concept/layouts/mobile_screen_layout.dart';
-import 'package:concept/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'home_page.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -51,7 +48,7 @@ class MyApp extends StatelessWidget {
         splashIconSize: double.maxFinite,
         centered: true,
         splashTransition: SplashTransition.fadeTransition,
-        nextScreen: Gallery(),
+        nextScreen: HomePage(),
       ),
     );
   }

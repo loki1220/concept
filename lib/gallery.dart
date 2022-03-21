@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:concept/feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -11,7 +13,7 @@ import 'file.dart';
 class AssetThumbnail extends StatelessWidget {
   const AssetThumbnail({
     Key? key,
-    this.asset,
+    required this.asset,
   }) : super(key: key);
 
   final AssetEntity? asset;
@@ -30,16 +32,9 @@ class AssetThumbnail extends StatelessWidget {
         // If there's data, display it as an image
         return InkWell(
             onTap: () {
-              if (asset?.type == AssetType.image) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ImageScreen(
-                      imageFile: asset.file,
-                    ),
-                  ),
-                );
-              }
+              Fluttertoast.showToast(
+                  msg: asset!.id.toString(), toastLength: Toast.LENGTH_SHORT);
+              print(asset!.toString());
             },
             /*Image.memory(bytes, fit: BoxFit.cover);*/
             child: Stack(children: [
@@ -48,7 +43,7 @@ class AssetThumbnail extends StatelessWidget {
                 child: Image.memory(bytes, fit: BoxFit.cover),
               ),
               // Display a Play icon if the asset is a video
-              if (asset!.type == AssetType.video)
+              if (asset?.type == AssetType.video)
                 Center(
                   child: Container(
                     color: Colors.blue,
@@ -112,7 +107,12 @@ class _GalleryState extends State<Gallery> {
                   Row(
                     children: <Widget>[
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => FeedScreen()));
+                        },
                         icon: Icon(Icons.clear),
                       )
                     ],
@@ -139,29 +139,28 @@ class _GalleryState extends State<Gallery> {
                 ],
               ),
               Divider(),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.45,
-                //color: Colors.black,
-                alignment: Alignment.center,
-                child: FutureBuilder<File>(
-                  future: imageFile,
-                  builder: (_, snapshot) {
-                    final file = snapshot.data;
-                    if (file == null) return Container();
-                    return Image.file(file);
-                  },
-                ),
-              ),
               // Container(
-              //     height: MediaQuery.of(context).size.height * 0.45,
-              //     child: assets != null
-              //         ? Image.(
-              //       assets[0],
-              //             height: MediaQuery.of(context).size.height * 0.45,
-              //             width: MediaQuery.of(context).size.width)
-              //         : Container(
-              //             child: Text("No data"),
-              //           )),
+              //   height: MediaQuery.of(context).size.height * 0.45,
+              //   //color: Colors.black,
+              //   alignment: Alignment.center,
+              //   child: FutureBuilder<File>(
+              //     future: imageFile,
+              //     builder: (_, snapshot) {
+              //       final file = snapshot.data;
+              //       if (file == null) return Container();
+              //       return Image.file(file);
+              //     },
+              //   ),
+              // ),
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  child: assets != null
+                      ? Image.file(File("assets.indexOf(imageFile.)"),
+                          height: MediaQuery.of(context).size.height * 0.45,
+                          width: MediaQuery.of(context).size.width)
+                      : Container(
+                          child: Text("No data"),
+                        )),
               Divider(),
               SingleChildScrollView(
                 child: Container(
@@ -186,22 +185,4 @@ class _GalleryState extends State<Gallery> {
       ),
     );
   }
-  // @override
-  // void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  //   super.debugFillProperties(properties);
-  //   properties.add(DiagnosticsProperty<Future<File>>('imageFile', imageFile));
-  // }
 }
-
-// InkWell(
-// onTap: () {
-// if (asset.type == AssetType.image) {
-// Navigator.push(
-// context,
-// MaterialPageRoute(
-// builder: (_) => ImageScreen(imageFile: asset.file),
-// ),
-// );
-// }
-// },
-// ),

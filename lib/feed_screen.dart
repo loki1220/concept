@@ -217,7 +217,59 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      GradientText("Concept",
+                          style: GoogleFonts.rumRaisin(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 28,
+                          ),
+                          colors: <Color>[
+                            Color(0xFF3E6372),
+                            Color(0xFF362345),
+                          ])
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showCustomDialog(context);
+                        },
+                        icon: GradientIcon(
+                          Icons.add_circle_outline_sharp,
+                          30,
+                          LinearGradient(
+                            colors: <Color>[
+                              Color(0XFF28B6ED),
+                              Color(0XFFFA0AFF),
+                            ],
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Divider(
+              height: 1,
+              color: Colors.pinkAccent,
+            ),
+          ],
+        ),
+      ),
+/*
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: GradientText(
@@ -252,6 +304,7 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ],
       ),
+*/
     );
   }
 }

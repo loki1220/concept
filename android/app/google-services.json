@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "846223889101",
+    "project_id": "concept-3d115",
+    "storage_bucket": "concept-3d115.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846223889101:android:d52de9b0ab0f17b6ee4f84",
+        "android_client_info": {
+          "package_name": "com.example.concept"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846223889101-fpih18kban60pr57hnrimd6mu0f4m8fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAORI5TacNBATGC3eXBTqmTVnO451wUy0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846223889101-fpih18kban60pr57hnrimd6mu0f4m8fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

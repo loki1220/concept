@@ -15,9 +15,12 @@ class MyTextField extends StatelessWidget {
   final int? maxLength;
   final String? prefixText;
   final Widget? prefix;
+  final TextInputAction? textInputAction;
+  final String? helperText;
 
   final bool isCenter;
   final bool obscureText;
+  final bool autofocus;
 
   final FormFieldSetter<String>? onSaved;
 
@@ -36,6 +39,9 @@ class MyTextField extends StatelessWidget {
     this.prefixText,
     this.prefix,
     required this.obscureText,
+    this.textInputAction,
+    this.helperText,
+    required this.autofocus,
   }) : super(key: key);
 
   @override
@@ -51,59 +57,57 @@ class MyTextField extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          height: 45,
-          child: TextFormField(
-            cursorColor: Colors.black,
-            //textDirection: TextDirection.ltr,
-            controller: controller,
-            keyboardType: keyboardType,
-            /*TextInputType.emailAddress,*/
-            validator: validator,
-            maxLength: maxLength,
-            obscureText: obscureText,
-            /*(value) {
-              if (value!.isEmpty) {
-                return ("Please Enter Your Email");
-              }
-              // reg expression for email validation
-              if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                  .hasMatch(value)) {
-                return ("Please Enter a valid email");
-              }
-              return null;
-            },*/
-            onSaved: onSaved,
-            textAlign: isCenter ? TextAlign.center : TextAlign.start,
-
-            /*(value) {
-              controller?.text = value!;
-            },*/
-            //textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              counterText: "",
-              suffixIcon: suffixbutton,
-              prefixText: prefixText,
-              prefix: prefix,
-              filled: true,
-              fillColor: Colors.white.withOpacity(0.8),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: 10, horizontal: isCenter ? 0 : 15),
-              border: InputBorder.none,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
-              ),
-              hintText: fieldname,
-              hintStyle: GoogleFonts.roboto(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black.withOpacity(0.5),
-              ),
+        TextFormField(
+          cursorColor: Colors.black,
+          //textDirection: TextDirection.ltr,
+          controller: controller,
+          autofocus: autofocus,
+          keyboardType: keyboardType,
+          validator: validator,
+          maxLength: maxLength,
+          obscureText: obscureText,
+          onSaved: onSaved,
+          textAlign: isCenter ? TextAlign.center : TextAlign.start,
+          textInputAction: textInputAction,
+          decoration: InputDecoration(
+            counterText: "",
+            suffixIcon: suffixbutton,
+            prefixText: prefixText,
+            prefix: prefix,
+            filled: true,
+            helperText: "",
+            fillColor: Colors.white.withOpacity(0.8),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: 10, horizontal: isCenter ? 0 : 15),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
+            ),
+            hintText: fieldname,
+            hintStyle: GoogleFonts.roboto(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Colors.black.withOpacity(0.5),
             ),
           ),
         ),

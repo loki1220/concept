@@ -35,6 +35,7 @@ class _DetailsState extends State<Details> {
 
   // editing Controller
   final userNameEditingController = TextEditingController();
+  final fullNameEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
 
@@ -214,6 +215,7 @@ class _DetailsState extends State<Details> {
                   builder: (context) => Started_Page(),
                 ),
               );
+              FocusScope.of(context).unfocus();
             },
             child: Container(
               child: /*_isLoading
@@ -240,156 +242,170 @@ class _DetailsState extends State<Details> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              "assets/detailsbg.png",
-              fit: BoxFit.fill,
-            ),
-            SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      SizedBox(
-                        height: kToolbarHeight + 15,
-                      ),
-                      Text(
-                        "Profile",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: 130,
-                        height: 130,
-                        child: Center(
-                          child: Container(
-                            child: IconButton(
-                              onPressed: () {
-                                showCustomDialog(context);
-                              },
-                              icon: GradientIcon(
-                                Icons.camera_alt_outlined,
-                                40.0,
-                                LinearGradient(
-                                  colors: <Color>[
-                                    Color(0xFFFA0AFF),
-                                    Color(0xFF28B6ED),
-                                  ],
-                                  begin: Alignment.center,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                "assets/detailsbg.png",
+                fit: BoxFit.fill,
+              ),
+              SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SizedBox(
+                          height: kToolbarHeight + 15,
+                        ),
+                        Text(
+                          "Profile",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF525252)),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: 130,
+                          height: 130,
+                          child: Center(
+                            child: Container(
+                              child: IconButton(
+                                onPressed: () {
+                                  showCustomDialog(context);
+                                },
+                                icon: GradientIcon(
+                                  Icons.camera_alt_outlined,
+                                  40.0,
+                                  LinearGradient(
+                                    colors: <Color>[
+                                      Color(0xFFFA0AFF),
+                                      Color(0xFF28B6ED),
+                                    ],
+                                    begin: Alignment.center,
+                                  ),
                                 ),
                               ),
+                              width: 125.0,
+                              height: 125.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                // image: DecorationImage(
+                                //   fit: BoxFit.fill,
+                                //   image: NetworkImage(
+                                //       "https://images.unsplash.com/photo-1594899756066-46964fff3add?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=170&q=80"),
+                                // ),
+                              ),
                             ),
-                            width: 125.0,
-                            height: 125.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              // image: DecorationImage(
-                              //   fit: BoxFit.fill,
-                              //   image: NetworkImage(
-                              //       "https://images.unsplash.com/photo-1594899756066-46964fff3add?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=170&q=80"),
-                              // ),
+                          ),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0xFF28B6ED), Color(0xFFE063FF)],
                             ),
                           ),
                         ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Color(0xFF28B6ED), Color(0xFFE063FF)],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: false,
+                          isCenter: true,
+                          controller: userNameEditingController,
+                          fieldname: "User Name",
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: false,
+                          isCenter: true,
+                          controller: fullNameEditingController,
+                          fieldname: "Full Name",
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: true,
+                          isCenter: true,
+                          controller: passwordEditingController,
+                          fieldname: "Password",
+                          validator: (value) {
+                            RegExp regex = new RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
+                            if (value!.isEmpty) {
+                              return ("Password is required for login");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("Enter (Min. 8 letter, 1 Caps letter, 1 special letter, 1 Num)");
+                            }
+                          },
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: true,
+                          isCenter: true,
+                          controller: confirmPasswordEditingController,
+                          fieldname: "Confirm Password",
+                          validator: (value) {
+                            if (confirmPasswordEditingController.text !=
+                                passwordEditingController.text) {
+                              return "Password don't match";
+                            }
+                            return null;
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          child: SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                                inactiveTrackColor: Colors.white,
+                                trackShape: GradientSliderTrackShape(
+                                    linearGradient: LinearGradient(colors: [
+                                  Color(0xFFE063FF),
+                                  Color(0xFF28B6ED)
+                                ])),
+                                trackHeight: 12.0,
+                                overlayColor: Colors.purple.withAlpha(36),
+                                thumbShape: customImage != null
+                                    ? SliderThumbImage(customImage!)
+                                    : const RoundSliderThumbShape()),
+                            child: Slider(
+                              min: 0,
+                              max: 100,
+                              label: intValue.toString(),
+                              divisions: widget.divisions,
+                              onChanged: (double value) {
+                                setState(() {
+                                  intValue = value;
+                                });
+                              },
+                              value: intValue,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      MyTextField(
-                        obscureText: false,
-                        isCenter: true,
-                        controller: userNameEditingController,
-                        fieldname: "User Name",
-                      ),
-                      MyTextField(
-                        obscureText: true,
-                        isCenter: true,
-                        controller: passwordEditingController,
-                        fieldname: "Password",
-                        validator: (value) {
-                          RegExp regex = new RegExp(
-                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
-                          if (value!.isEmpty) {
-                            return ("Password is required for login");
-                          }
-                          if (!regex.hasMatch(value)) {
-                            return ("Enter (Min. 8 letter, 1 Caps letter, 1 special letter, 1 Num)");
-                          }
-                        },
-                      ),
-                      MyTextField(
-                        obscureText: true,
-                        isCenter: true,
-                        controller: confirmPasswordEditingController,
-                        fieldname: "Confirm Password",
-                        validator: (value) {
-                          if (confirmPasswordEditingController.text !=
-                              passwordEditingController.text) {
-                            return "Password don't match";
-                          }
-                          return null;
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                              inactiveTrackColor: Colors.white,
-                              trackShape: GradientSliderTrackShape(
-                                  linearGradient: LinearGradient(colors: [
-                                Color(0xFFE063FF),
-                                Color(0xFF28B6ED)
-                              ])),
-                              trackHeight: 12.0,
-                              // overlayColor: Colors.purple.withAlpha(36),
-                              thumbShape: customImage != null
-                                  ? SliderThumbImage(customImage!)
-                                  : const RoundSliderThumbShape()),
-                          child: Slider(
-                            min: 0,
-                            max: 100,
-                            divisions: widget.divisions,
-                            onChanged: (double value) {
-                              setState(() {
-                                intValue = value;
-                              });
-                            },
-                            value: intValue,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            nextButton,
+                          ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          nextButton,
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
