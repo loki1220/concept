@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../comments_screen.dart';
+import '../screens/comments_screen.dart';
 
 class PostCard extends StatefulWidget {
   final snap;

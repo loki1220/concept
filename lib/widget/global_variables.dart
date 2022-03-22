@@ -1,4 +1,5 @@
-import 'package:concept/feed_screen.dart';
+import 'package:concept/screens/feed_screen.dart';
+import 'package:concept/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 const webScreenSize = 600;
@@ -8,5 +9,5 @@ List<Widget> homeScreenItems = [
   Text("Search"),
   Text("PPt"),
   Text("Notify"),
-  Text("Pofile"),
+  Profile_Screen(),
 ];

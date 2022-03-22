@@ -1,20 +1,18 @@
 import 'dart:async';
 
-import 'package:concept/details.dart';
-import 'package:concept/forgetpass.dart';
-import 'package:concept/otp_page.dart';
-import 'package:concept/signup_page.dart';
+import 'package:concept/screens/signup_page.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import 'layouts/mobile_screen_layout.dart';
+import '../layouts/mobile_screen_layout.dart';
+import 'forgetpass.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -101,6 +99,25 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    // Fluttertoast.showToast(msg: "msg", toastLength: Toast.LENGTH_SHORT);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
   Widget _buildGoogleButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -108,10 +125,23 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           height: 25,
           width: 25,
-          child: Image.asset(
-            "assets/gbutton.png",
-            width: 25,
-            height: 25,
+          child: GestureDetector(
+            onTap: () async {
+              await signInWithGoogle();
+              setState(() {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MobileScreenLayout(),
+                  ),
+                );
+              });
+            },
+            child: Image.asset(
+              "assets/gbutton.png",
+              width: 25,
+              height: 25,
+            ),
           ),
         ),
         SizedBox(
@@ -321,7 +351,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                           MyTextField(
-                            autofocus: true,
+                            autofocus: false,
                             obscureText: _secureText,
                             isCenter: false,
                             txt: "Password",

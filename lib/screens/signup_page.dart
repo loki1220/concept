@@ -1,11 +1,11 @@
-import 'package:concept/login_page.dart';
 import 'package:concept/resources/auth_methods.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:concept/widget/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);

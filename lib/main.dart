@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:concept/screens/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,4 +1,4 @@
-import 'package:concept/gallery.dart';
+import 'package:concept/screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
