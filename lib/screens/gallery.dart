@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:concept/screens/feed_screen.dart';
+import 'package:concept/screens/image_confirm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -95,33 +96,36 @@ class _GalleryState extends State<Gallery> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        //resizeToAvoidBottomInset: false,
-        body: Container(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => FeedScreen()));
-                        },
-                        icon: Icon(Icons.clear),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      children: [
-                        GradientText(
+    return Scaffold(
+      //resizeToAvoidBottomInset: false,
+      body: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              height: kToolbarHeight - 18,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => FeedScreen()));
+                      },
+                      icon: Icon(Icons.clear),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    children: [
+                      TextButton(
+                        child: GradientText(
                           "Next",
                           colors: <Color>[
                             Color(0xFF5DB2EF),
@@ -132,55 +136,63 @@ class _GalleryState extends State<Gallery> {
                             fontWeight: FontWeight.w500,
                             fontSize: 20,
                           ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Divider(),
-              // Container(
-              //   height: MediaQuery.of(context).size.height * 0.45,
-              //   //color: Colors.black,
-              //   alignment: Alignment.center,
-              //   child: FutureBuilder<File>(
-              //     future: imageFile,
-              //     builder: (_, snapshot) {
-              //       final file = snapshot.data;
-              //       if (file == null) return Container();
-              //       return Image.file(file);
-              //     },
-              //   ),
-              // ),
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  child: assets != null
-                      ? Image.file(File("assets.indexOf(imageFile.)"),
-                          height: MediaQuery.of(context).size.height * 0.45,
-                          width: MediaQuery.of(context).size.width)
-                      : Container(
-                          child: Text("No data"),
-                        )),
-              Divider(),
-              SingleChildScrollView(
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 3.0,
-                  child: GridView.builder(
-                    //scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      // A grid view with 3 items per row
-                      crossAxisCount: 3,
-                    ),
-                    itemCount: assets.length,
-                    itemBuilder: (_, index) {
-                      return AssetThumbnail(asset: assets[index]);
-                    },
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Image_Confirm_Screen(),
+                            ),
+                          );
+                        },
+                      )
+                    ],
                   ),
+                )
+              ],
+            ),
+            Divider(),
+            // Container(
+            //   height: MediaQuery.of(context).size.height * 0.45,
+            //   //color: Colors.black,
+            //   alignment: Alignment.center,
+            //   child: FutureBuilder<File>(
+            //     future: imageFile,
+            //     builder: (_, snapshot) {
+            //       final file = snapshot.data;
+            //       if (file == null) return Container();
+            //       return Image.file(file);
+            //     },
+            //   ),
+            // ),
+            Container(
+                height: MediaQuery.of(context).size.height * 0.45,
+                child: assets != null
+                    ? Image.file(File("assets.indexOf(imageFile.)"),
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        width: MediaQuery.of(context).size.width)
+                    : Container(
+                        child: Text("No data"),
+                      )),
+            Divider(),
+            SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height / 3.0,
+                child: GridView.builder(
+                  //scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    // A grid view with 3 items per row
+                    crossAxisCount: 3,
+                  ),
+                  itemCount: assets.length,
+                  itemBuilder: (_, index) {
+                    return AssetThumbnail(asset: assets[index]);
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
