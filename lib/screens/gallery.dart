@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:concept/layouts/mobile_screen_layout.dart';
 import 'package:concept/screens/feed_screen.dart';
 import 'package:concept/screens/image_confirm.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import 'file.dart';
 
-class AssetThumbnail extends StatelessWidget {
+class AssetThumbnail extends StatefulWidget {
   const AssetThumbnail({
     Key? key,
     required this.asset,
@@ -20,12 +21,18 @@ class AssetThumbnail extends StatelessWidget {
   final AssetEntity? asset;
 
   @override
+  State<AssetThumbnail> createState() => _AssetThumbnailState();
+}
+
+class _AssetThumbnailState extends State<AssetThumbnail> {
+  @override
   Widget build(BuildContext context) {
     // We're using a FutureBuilder since thumbData is a future
     return FutureBuilder<Uint8List?>(
-      future: asset?.thumbnailData,
+      future: widget.asset?.thumbnailData,
       builder: (_, snapshot) {
         final bytes = snapshot.data;
+
         // If we have no data, display a spinner
         if (bytes == null) {
           return CircularProgressIndicator();
@@ -33,9 +40,16 @@ class AssetThumbnail extends StatelessWidget {
         // If there's data, display it as an image
         return InkWell(
             onTap: () {
-              Fluttertoast.showToast(
-                  msg: asset!.id.toString(), toastLength: Toast.LENGTH_SHORT);
-              print(asset!.toString());
+              setState(() {
+                Gallery(
+                  widget.asset!.file,
+                );
+                // Fluttertoast.showToast(
+                //     msg: snapshot.data.toString(),
+                //     toastLength: Toast.LENGTH_SHORT);
+              });
+
+              print(widget.asset!.toString());
             },
             /*Image.memory(bytes, fit: BoxFit.cover);*/
             child: Stack(children: [
@@ -44,7 +58,7 @@ class AssetThumbnail extends StatelessWidget {
                 child: Image.memory(bytes, fit: BoxFit.cover),
               ),
               // Display a Play icon if the asset is a video
-              if (asset?.type == AssetType.video)
+              if (widget.asset?.type == AssetType.video)
                 Center(
                   child: Container(
                     color: Colors.blue,
@@ -61,16 +75,18 @@ class AssetThumbnail extends StatelessWidget {
 }
 
 class Gallery extends StatefulWidget {
-  const Gallery({Key? key}) : super(key: key);
+  final Future<File?> imageFile;
+  const Gallery(
+    this.imageFile, {
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _GalleryState createState() => _GalleryState();
+  GalleryState createState() => GalleryState();
 }
 
-class _GalleryState extends State<Gallery> {
-  List<AssetEntity> assets = [];
-
-  Future<File>? imageFile;
+class GalleryState extends State<Gallery> {
+  static List<AssetEntity> assets = [];
 
   _fetchAssets() async {
     // Set onlyAll to true, to fetch only the 'Recent' album
@@ -111,10 +127,13 @@ class _GalleryState extends State<Gallery> {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => FeedScreen()));
+                        // Fluttertoast.showToast(
+                        //     msg: ,
+                        //     toastLength: Toast.LENGTH_SHORT);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (builder) => MobileScreenLayout()));
                       },
                       icon: Icon(Icons.clear),
                     )
@@ -167,10 +186,19 @@ class _GalleryState extends State<Gallery> {
             // ),
             Container(
                 height: MediaQuery.of(context).size.height * 0.45,
-                child: assets != null
-                    ? Image.file(File("assets.indexOf(imageFile.)"),
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        width: MediaQuery.of(context).size.width)
+                child: widget.imageFile != null
+                    ? Container(
+                        color: Colors.black,
+                        alignment: Alignment.center,
+                        child: FutureBuilder<File?>(
+                          future: widget.imageFile,
+                          builder: (_, snapshot) {
+                            final file = snapshot.data;
+                            if (file == null) return Container();
+                            return Image.file(file);
+                          },
+                        ),
+                      )
                     : Container(
                         child: Text("No data"),
                       )),

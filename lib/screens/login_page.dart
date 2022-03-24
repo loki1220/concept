@@ -7,11 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../layouts/mobile_screen_layout.dart';
+import 'details.dart';
 import 'forgetpass.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,11 +67,18 @@ class _LoginPageState extends State<LoginPage> {
       try {
         await _auth
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((uid) => {
-                  Fluttertoast.showToast(msg: "Login Successful"),
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => MobileScreenLayout())),
-                });
+            .then(
+              (uid) => {
+                Fluttertoast.showToast(msg: "Login Successful"),
+                Get.to(
+                  Details(
+                    assetImage: 'assets/sliderstar.png',
+                  ),
+                ),
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //     builder: (context) => MobileScreenLayout())),
+              },
+            );
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
@@ -118,47 +128,47 @@ class _LoginPageState extends State<LoginPage> {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Widget _buildGoogleButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          height: 25,
-          width: 25,
-          child: GestureDetector(
-            onTap: () async {
-              await signInWithGoogle();
-              setState(() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MobileScreenLayout(),
-                  ),
-                );
-              });
-            },
-            child: Image.asset(
-              "assets/gbutton.png",
-              width: 25,
-              height: 25,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 25,
-        ),
-        Container(
-          height: 25,
-          width: 25,
-          child: Image.asset(
-            "assets/fbutton.png",
-            width: 25,
-            height: 25,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildGoogleButton() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: <Widget>[
+  //       Container(
+  //         height: 25,
+  //         width: 25,
+  //         child: GestureDetector(
+  //           onTap: () async {
+  //             await signInWithGoogle();
+  //             setState(() {
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => MobileScreenLayout(),
+  //                 ),
+  //               );
+  //             });
+  //           },
+  //           child: Image.asset(
+  //             "assets/gbutton.png",
+  //             width: 25,
+  //             height: 25,
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         width: 25,
+  //       ),
+  //       Container(
+  //         height: 25,
+  //         width: 25,
+  //         child: Image.asset(
+  //           "assets/fbutton.png",
+  //           width: 25,
+  //           height: 25,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget forgotPass() {
     return Row(
@@ -331,7 +341,7 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: false,
                             isCenter: false,
                             autofocus: false,
-                            txt: "Username",
+                            txt: "Username or Email address",
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
@@ -388,17 +398,17 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       height: 150,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "or continue with",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF1F1F1F)),
-                          ),
-                          _buildGoogleButton(),
+                          // Text(
+                          //   "or continue with",
+                          //   textAlign: TextAlign.center,
+                          //   style: GoogleFonts.roboto(
+                          //       fontSize: 14,
+                          //       fontWeight: FontWeight.w400,
+                          //       color: Color(0xFF1F1F1F)),
+                          // ),
+                          //_buildGoogleButton(),
                           register(),
                         ],
                       ),

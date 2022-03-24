@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import '../layouts/mobile_screen_layout.dart';
+
 class Image_Confirm_Screen extends StatefulWidget {
   const Image_Confirm_Screen({Key? key}) : super(key: key);
 
@@ -89,7 +91,13 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                         children: [
                           WidgetSpan(
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) =>
+                                            MobileScreenLayout()));
+                              },
                               icon: Icon(
                                 Icons.arrow_back_ios,
                                 color: Color(0xFF28B6ED),
@@ -98,7 +106,13 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           ),
                           WidgetSpan(
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) =>
+                                            MobileScreenLayout()));
+                              },
                               child: GradientText(
                                 "Back",
                                 colors: [Color(0xFF5DB2EF), Color(0xFFFA0AFF)],
@@ -152,8 +166,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
               ),
             ),
             Container(
-              //color: Colors.black,
-              height: 500,
+              // color: Colors.black,
+              height: 600,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -199,22 +213,22 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Settings",
-                          style: GoogleFonts.roboto(
-                            color: Color(0xFF525252),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  //   child: Row(
+                  //     children: [
+                  //       Text(
+                  //         "Settings",
+                  //         style: GoogleFonts.roboto(
+                  //           color: Color(0xFF525252),
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  Divider(),
                   Container(
                     color: Color(0xFFC4C4C4).withOpacity(0.2),
                     child: Column(
@@ -334,6 +348,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Container(
                         height: 42,

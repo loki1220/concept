@@ -22,7 +22,7 @@ class _SignupPageState extends State<SignupPage> {
   bool _securityText = true;
 
   // editing Controller
-  final fullnameEditingController = TextEditingController();
+  final usernameEditingController = TextEditingController();
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
@@ -32,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void dispose() {
     super.dispose();
-    fullnameEditingController.dispose();
+    usernameEditingController.dispose();
     emailEditingController.dispose();
     passwordEditingController.dispose();
   }
@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     String res = await AuthMethods().signUpUser(
-      fullname: fullnameEditingController.text,
+      username: usernameEditingController.text,
       email: emailEditingController.text,
       password: passwordEditingController.text,
     );
@@ -174,8 +174,8 @@ class _SignupPageState extends State<SignupPage> {
                         autofocus: false,
                         obscureText: false,
                         isCenter: true,
-                        controller: fullnameEditingController,
-                        fieldname: "Enter Name",
+                        controller: usernameEditingController,
+                        fieldname: "Username",
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
                         helperText: "",
@@ -190,7 +190,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          fullnameEditingController.text = value!;
+                          usernameEditingController.text = value!;
                         },
                         maxLength: 30,
                       ),
@@ -215,7 +215,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          fullnameEditingController.text = value!;
+                          usernameEditingController.text = value!;
                         },
                       ),
                       MyTextField(
@@ -269,7 +269,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          fullnameEditingController.text = value!;
+                          usernameEditingController.text = value!;
                         },
                         suffixbutton: IconButton(
                           icon: Icon(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:concept/screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final picker = ImagePicker();
+  Future<File?>? imageFile;
 
   Widget _slideButton() {
     return Material(
@@ -75,7 +78,7 @@ class _FeedScreenState extends State<FeedScreen> {
             if (permitted == true) return;
 // ######
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => Gallery()),
+              MaterialPageRoute(builder: (_) => Gallery(imageFile!)),
             );
           },
           //     async {
