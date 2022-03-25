@@ -9,7 +9,12 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({Key? key}) : super(key: key);
+  final AssetEntity? asset;
+
+  const FeedScreen({
+    Key? key,
+    this.asset,
+  }) : super(key: key);
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -17,7 +22,9 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final picker = ImagePicker();
-  Future<File?>? imageFile;
+  // Future<File?>? imageFile;
+
+  // final AssetEntity asset;
 
   Widget _slideButton() {
     return Material(
@@ -77,8 +84,9 @@ class _FeedScreenState extends State<FeedScreen> {
             final permitted = await PhotoManager.requestPermissionExtend();
             if (permitted == true) return;
 // ######
+
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => Gallery(imageFile!)),
+              MaterialPageRoute(builder: (_) => Gallery()),
             );
           },
           //     async {

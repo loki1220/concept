@@ -1,85 +1,89 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:concept/layouts/mobile_screen_layout.dart';
-import 'package:concept/screens/feed_screen.dart';
-import 'package:concept/screens/image_confirm.dart';
+import 'package:concept/screens/image_editor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import '../layouts/mobile_screen_layout.dart';
+import 'asset_thumbnail.dart';
 
-import 'file.dart';
+// class AssetThumbnail extends StatefulWidget {
+//   const AssetThumbnail({
+//     Key? key,
+//     required this.asset,
+//   }) : super(key: key);
+//
+//   final AssetEntity asset;
+//
+//   @override
+//   State<AssetThumbnail> createState() => _AssetThumbnailState();
+// }
 
-class AssetThumbnail extends StatefulWidget {
-  const AssetThumbnail({
-    Key? key,
-    required this.asset,
-  }) : super(key: key);
-
-  final AssetEntity? asset;
-
-  @override
-  State<AssetThumbnail> createState() => _AssetThumbnailState();
-}
-
-class _AssetThumbnailState extends State<AssetThumbnail> {
-  @override
-  Widget build(BuildContext context) {
-    // We're using a FutureBuilder since thumbData is a future
-    return FutureBuilder<Uint8List?>(
-      future: widget.asset?.thumbnailData,
-      builder: (_, snapshot) {
-        final bytes = snapshot.data;
-
-        // If we have no data, display a spinner
-        if (bytes == null) {
-          return CircularProgressIndicator();
-        }
-        // If there's data, display it as an image
-        return InkWell(
-            onTap: () {
-              setState(() {
-                Gallery(
-                  widget.asset!.file,
-                );
-                // Fluttertoast.showToast(
-                //     msg: snapshot.data.toString(),
-                //     toastLength: Toast.LENGTH_SHORT);
-              });
-
-              print(widget.asset!.toString());
-            },
-            /*Image.memory(bytes, fit: BoxFit.cover);*/
-            child: Stack(children: [
-              // Wrap the image in a Positioned.fill to fill the space
-              Positioned.fill(
-                child: Image.memory(bytes, fit: BoxFit.cover),
-              ),
-              // Display a Play icon if the asset is a video
-              if (widget.asset?.type == AssetType.video)
-                Center(
-                  child: Container(
-                    color: Colors.blue,
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-            ]));
-      },
-    );
-  }
-}
+// class _AssetThumbnailState extends State<AssetThumbnail> {
+//   @override
+//   Widget build(BuildContext context) {
+//     // We're using a FutureBuilder since thumbData is a future
+//     return FutureBuilder<Uint8List?>(
+//       future: widget.asset.thumbnailData,
+//       builder: (_, snapshot) {
+//         final bytes = snapshot.data;
+//
+//         // If we have no data, display a spinner
+//         if (bytes == null) {
+//           return CircularProgressIndicator();
+//         }
+//         // If there's data, display it as an image
+//         return InkWell(
+//             onTap: () {
+//               if (asset.type == AssetType.image) {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (_) => ImageScreen(imageFile: asset.file),
+//                   ),
+//                 );
+//               }
+//               // setState(() {
+//               //   Gallery(
+//               //     // widget.asset!.file,
+//               //   );
+//               //   // Fluttertoast.showToast(
+//               //   //     msg: snapshot.data.toString(),
+//               //   //     toastLength: Toast.LENGTH_SHORT);
+//               // });
+//
+//               print(widget.asset!.toString());
+//             },
+//             /*Image.memory(bytes, fit: BoxFit.cover);*/
+//             child: Stack(children: [
+//               // Wrap the image in a Positioned.fill to fill the space
+//               Positioned.fill(
+//                 child: Image.memory(bytes, fit: BoxFit.cover),
+//               ),
+//               // Display a Play icon if the asset is a video
+//               if (widget.asset.type == AssetType.video)
+//                 Center(
+//                   child: Container(
+//                     color: Colors.blue,
+//                     child: Icon(
+//                       Icons.play_arrow,
+//                       color: Colors.white,
+//                     ),
+//                   ),
+//                 ),
+//             ]));
+//       },
+//     );
+//   }
+// }
 
 class Gallery extends StatefulWidget {
-  final Future<File?> imageFile;
-  const Gallery(
-    this.imageFile, {
+  const Gallery({
     Key? key,
+    this.imageFile,
   }) : super(key: key);
+
+  final Future<File?>? imageFile;
 
   @override
   GalleryState createState() => GalleryState();
@@ -127,13 +131,10 @@ class GalleryState extends State<Gallery> {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        // Fluttertoast.showToast(
-                        //     msg: ,
-                        //     toastLength: Toast.LENGTH_SHORT);
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (builder) => MobileScreenLayout()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => MobileScreenLayout()));
                       },
                       icon: Icon(Icons.clear),
                     )
@@ -160,7 +161,7 @@ class GalleryState extends State<Gallery> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Image_Confirm_Screen(),
+                              builder: (context) => Image_Editor(),
                             ),
                           );
                         },
@@ -170,38 +171,33 @@ class GalleryState extends State<Gallery> {
                 )
               ],
             ),
-            Divider(),
-            // Container(
-            //   height: MediaQuery.of(context).size.height * 0.45,
-            //   //color: Colors.black,
-            //   alignment: Alignment.center,
-            //   child: FutureBuilder<File>(
-            //     future: imageFile,
-            //     builder: (_, snapshot) {
-            //       final file = snapshot.data;
-            //       if (file == null) return Container();
-            //       return Image.file(file);
-            //     },
-            //   ),
-            // ),
             Container(
-                height: MediaQuery.of(context).size.height * 0.45,
-                child: widget.imageFile != null
-                    ? Container(
-                        color: Colors.black,
-                        alignment: Alignment.center,
-                        child: FutureBuilder<File?>(
-                          future: widget.imageFile,
-                          builder: (_, snapshot) {
-                            final file = snapshot.data;
-                            if (file == null) return Container();
-                            return Image.file(file);
-                          },
-                        ),
-                      )
-                    : Container(
-                        child: Text("No data"),
-                      )),
+              height: MediaQuery.of(context).size.height * 0.45,
+              child: widget.imageFile != null
+                  ? Container(
+                      // color: Colors.black,
+                      alignment: Alignment.center,
+                      child: FutureBuilder<File?>(
+                        future: widget.imageFile,
+                        builder: (_, snapshot) {
+                          final file = snapshot.data;
+                          if (file == null) return Container();
+                          return Image.file(file);
+                        },
+                      ),
+                    )
+                  : Container(
+                      child: GradientText(
+                        "Select Photo",
+                        style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w400, fontSize: 25),
+                        colors: [
+                          Color(0xFF5DB2EF),
+                          Color(0xFFFA0AFF),
+                        ],
+                      ),
+                    ),
+            ),
             Divider(),
             SingleChildScrollView(
               child: Container(

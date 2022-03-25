@@ -167,7 +167,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
             ),
             Container(
               // color: Colors.black,
-              height: 600,
+              height: 500,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -201,13 +201,14 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           aspectRatio: 487 / 451,
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  alignment: FractionalOffset.topCenter,
-                                  image: AssetImage(
-                                      "assets/postdp.png") /*MemoryImage(_file!)*/,
-                                )),
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                alignment: FractionalOffset.topCenter,
+                                image: AssetImage(
+                                    "assets/editing.png") /*MemoryImage(_file!)*/,
+                              ),
+                            ),
                           ),
                         ),
                       ),
