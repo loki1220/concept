@@ -150,7 +150,7 @@ class GalleryState extends State<Gallery> {
                           colors: <Color>[
                             Color(0xFF5DB2EF),
                             Color(0xFFFA0AFF),
-                            .....
+
                           ],
                           gradientDirection: GradientDirection.ttb,
                           style: GoogleFonts.roboto(
