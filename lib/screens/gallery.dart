@@ -118,106 +118,104 @@ class GalleryState extends State<Gallery> {
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
-      body: Container(
-        child: Column(
-          children: [
-            SizedBox(
-              height: kToolbarHeight - 18,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => MobileScreenLayout()));
-                      },
-                      icon: Icon(Icons.clear),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      TextButton(
-                        child: GradientText(
-                          "Next",
-                          colors: <Color>[
-                            Color(0xFF5DB2EF),
-                            Color(0xFFFA0AFF),
-                          ],
-                          gradientDirection: GradientDirection.ttb,
-                          style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Image_Editor(),
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.45,
-              child: widget.imageFile != null
-                  ? Container(
-                      // color: Colors.black,
-                      alignment: Alignment.center,
-                      child: FutureBuilder<File?>(
-                        future: widget.imageFile,
-                        builder: (_, snapshot) {
-                          final file = snapshot.data;
-                          if (file == null) return Container();
-                          return Image.file(file);
-                        },
-                      ),
-                    )
-                  : Container(
+      body: Column(
+        children: [
+          SizedBox(
+            height: kToolbarHeight - 18,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => MobileScreenLayout()));
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  children: [
+                    TextButton(
                       child: GradientText(
-                        "Select Photo",
-                        style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w400, fontSize: 25),
-                        colors: [
+                        "Next",
+                        colors: <Color>[
                           Color(0xFF5DB2EF),
                           Color(0xFFFA0AFF),
                         ],
+                        gradientDirection: GradientDirection.ttb,
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
                       ),
-                    ),
-            ),
-            Divider(),
-            SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height / 3.0,
-                child: GridView.builder(
-                  //scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    // A grid view with 3 items per row
-                    crossAxisCount: 3,
-                  ),
-                  itemCount: assets.length,
-                  itemBuilder: (_, index) {
-                    return AssetThumbnail(asset: assets[index]);
-                  },
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Image_Editor(),
+                          ),
+                        );
+                      },
+                    )
+                  ],
                 ),
+              )
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: widget.imageFile != null
+                ? Container(
+                    // color: Colors.black,
+                    alignment: Alignment.center,
+                    child: FutureBuilder<File?>(
+                      future: widget.imageFile,
+                      builder: (_, snapshot) {
+                        final file = snapshot.data;
+                        if (file == null) return Container();
+                        return Image.file(file);
+                      },
+                    ),
+                  )
+                : Container(
+                    child: GradientText(
+                      "Select Photo",
+                      style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w400, fontSize: 25),
+                      colors: [
+                        Color(0xFF5DB2EF),
+                        Color(0xFFFA0AFF),
+                      ],
+                    ),
+                  ),
+          ),
+          Divider(),
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height / 3.0,
+              child: GridView.builder(
+                //scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  // A grid view with 3 items per row
+                  crossAxisCount: 3,
+                ),
+                itemCount: assets.length,
+                itemBuilder: (_, index) {
+                  return AssetThumbnail(asset: assets[index]);
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

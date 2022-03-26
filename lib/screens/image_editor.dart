@@ -8,7 +8,9 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'image_confirm.dart';
 
 class Image_Editor extends StatefulWidget {
-  const Image_Editor({Key? key}) : super(key: key);
+  const Image_Editor({Key? key, this.imageFile}) : super(key: key);
+
+  final Future<File?>? imageFile;
 
   @override
   State<Image_Editor> createState() => _Image_EditorState();
