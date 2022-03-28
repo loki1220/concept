@@ -1,27 +1,55 @@
-import 'package:concept/screens/gallery.dart';
-import 'package:flutter/gestures.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../layouts/mobile_screen_layout.dart';
+import '../model/post.dart';
+import '../resources/storage_methods.dart';
+import '../widget/utils.dart';
 
 class Image_Confirm_Screen extends StatefulWidget {
-  const Image_Confirm_Screen({Key? key}) : super(key: key);
+  const Image_Confirm_Screen({Key? key, required this.imageFile})
+      : super(key: key);
+
+  final Future<File?> imageFile;
 
   @override
   State<Image_Confirm_Screen> createState() => _Image_Confirm_ScreenState();
 }
 
 class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
+  int im = 0;
+
+  @override
+  void initState() {
+    _fetch();
+    super.initState();
+  }
+
+  String photoUrl = "",
+      userName = "",
+      description = "",
+      time = "",
+      user_id = "",
+      profImage = "",
+      songName = "",
+      caption = "",
+      videoUrl = "";
+
   bool isLoading = false;
 
   bool value1 = false;
   bool value2 = false;
   bool value3 = false;
 
-  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _captionController = TextEditingController();
 
   // Widget buildSwitch() => Transform.scale(
   //       scale: 1,
@@ -70,9 +98,110 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
         ),
       );
 
+  Uint8List? _file;
+
+  _fetch() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser;
+    if (firebaseUser != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) async {
+        setState(() {
+          photoUrl = ds.data()!["photoUrl"];
+          userName = ds.data()!["username"];
+          user_id = ds.data()!["uid"];
+
+          Fluttertoast.showToast(msg: userName);
+        });
+      }).catchError((e) {
+        print(e);
+      });
+    }
+  }
+
+  Future<String> uploadImage() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String res = "Some error";
+    try {
+      String docId = FirebaseFirestore.instance.collection('posts').doc().id;
+
+      String profImage =
+          await StorageMethods().uploadImageToStorage('posts', _file!, false);
+
+      Post post = Post(
+        uid: user_id,
+        username: userName,
+        likes: [],
+        postId: docId,
+        datePublished: DateTime.now(),
+        postUrl: profImage,
+        profImage: photoUrl,
+        id: "",
+        songName: songName,
+        caption: caption,
+        // isPhoto: isPhoto == "true" ? true : false,
+        videoUrl: videoUrl,
+      );
+
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(docId)
+          .set(post.toJson());
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user_id)
+          .collection("MyPosts")
+          .doc(docId)
+          .set(post.toJson());
+      res = "Success";
+
+      if (res == "Success") {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(
+          context,
+          'Posted! :)',
+        );
+        clearImage();
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (e) {
+      res = e.toString();
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+    return res;
+  }
+
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _captionController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -82,7 +211,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
               height: kToolbarHeight - 18,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -182,7 +311,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.3,
                         child: TextFormField(
-                          controller: _descriptionController,
+                          controller: _captionController,
                           decoration: const InputDecoration(
                               hintText: "Write a caption...",
                               hintStyle: TextStyle(
@@ -200,16 +329,29 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                         child: AspectRatio(
                           aspectRatio: 487 / 451,
                           child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                alignment: FractionalOffset.topCenter,
-                                image: AssetImage(
-                                    "assets/editing.png") /*MemoryImage(_file!)*/,
-                              ),
+                            height: 350,
+                            // color: Colors.black,
+                            alignment: Alignment.center,
+                            child: FutureBuilder<File?>(
+                              future: widget.imageFile, //assets[im].file,
+                              builder: (_, snapshot) {
+                                final file = snapshot.data;
+                                if (file == null) return Container();
+                                return Image.file(file);
+                              },
                             ),
                           ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(8.0),
+                          //     image: DecorationImage(
+                          //       fit: BoxFit.fill,
+                          //       alignment: FractionalOffset.topCenter,
+                          //       image: AssetImage(
+                          //           "assets/editing.png") /*MemoryImage(_file!)*/,
+                          //     ),
+                          //   ),
+                          // ),
                         ),
                       ),
                     ],
@@ -395,7 +537,15 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           color: Color(0xFF5DB2EF),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            uploadImage().whenComplete(
+                              () => Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => MobileScreenLayout(),
+                                ),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),

@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concept/screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+
+import '../widget/global_variables.dart';
+import '../widget/post_card.dart';
 
 class FeedScreen extends StatefulWidget {
   final AssetEntity? asset;
@@ -37,7 +39,7 @@ class _FeedScreenState extends State<FeedScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: <Color>[
               Color(0xFFE063FF),
               Color(0xFF5DB2EF),
@@ -71,7 +73,7 @@ class _FeedScreenState extends State<FeedScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          color: Color(0xFFE063FF),
+          color: const Color(0xFFE063FF),
           // gradient: LinearGradient(
           //   colors: <Color>[
           //     Color(0xFFE063FF),
@@ -86,7 +88,7 @@ class _FeedScreenState extends State<FeedScreen> {
 // ######
 
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => Gallery()),
+              MaterialPageRoute(builder: (_) => const Gallery()),
             );
           },
           //     async {
@@ -119,7 +121,7 @@ class _FeedScreenState extends State<FeedScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          color: Color(0xFF28B6ED),
+          color: const Color(0xFF28B6ED),
           // gradient: LinearGradient(
           //   colors: <Color>[
           //     Color(0xFFE600EB),
@@ -154,7 +156,7 @@ class _FeedScreenState extends State<FeedScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: <Color>[
               Color(0xFFE063FF),
               Color(0xFF5DB2EF),
@@ -183,7 +185,7 @@ class _FeedScreenState extends State<FeedScreen> {
       barrierLabel: "Barrier",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: 700),
+      transitionDuration: const Duration(milliseconds: 700),
       pageBuilder: (_, __, ___) {
         return Center(
           child: Container(
@@ -200,7 +202,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 ],
               ),
             ),
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
             decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(18)),
@@ -210,9 +212,9 @@ class _FeedScreenState extends State<FeedScreen> {
       transitionBuilder: (_, anim, __, child) {
         Tween<Offset> tween;
         if (anim.status == AnimationStatus.reverse) {
-          tween = Tween(begin: Offset(-1, 0), end: Offset.zero);
+          tween = Tween(begin: const Offset(-1, 0), end: Offset.zero);
         } else {
-          tween = Tween(begin: Offset(1, 0), end: Offset.zero);
+          tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
         }
 
         return SlideTransition(
@@ -228,9 +230,65 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: GradientText(
+            "Concept",
+            style: GoogleFonts.rumRaisin(
+              fontWeight: FontWeight.w500,
+              fontSize: 28,
+            ),
+            colors: const <Color>[
+              Color(0xFF3E6372),
+              Color(0xFF362345),
+            ],
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                showCustomDialog(context);
+              },
+              icon: GradientIcon(
+                Icons.add_circle_outline_sharp,
+                30,
+                const LinearGradient(
+                  colors: <Color>[
+                    Color(0XFF28B6ED),
+                    Color(0XFFFA0AFF),
+                  ],
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+          builder: (context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (ctx, index) => Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: width > webScreenSize ? width * 0.3 : 0,
+                  vertical: width > webScreenSize ? 15 : 0,
+                ),
+                child: PostCard(
+                  snap: snapshot.data!.docs[index].data(),
+                ),
+              ),
+            );
+          },
+        ), /* Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -244,7 +302,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             fontWeight: FontWeight.w500,
                             fontSize: 28,
                           ),
-                          colors: <Color>[
+                          colors: const <Color>[
                             Color(0xFF3E6372),
                             Color(0xFF362345),
                           ])
@@ -259,7 +317,7 @@ class _FeedScreenState extends State<FeedScreen> {
                         icon: GradientIcon(
                           Icons.add_circle_outline_sharp,
                           30,
-                          LinearGradient(
+                          const LinearGradient(
                             colors: <Color>[
                               Color(0XFF28B6ED),
                               Color(0XFFFA0AFF),
@@ -273,49 +331,13 @@ class _FeedScreenState extends State<FeedScreen> {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               height: 1,
               color: Colors.pinkAccent,
             ),
           ],
-        ),
+        ),*/
       ),
-/*
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: GradientText(
-          "Concept",
-          style: GoogleFonts.rumRaisin(
-            fontWeight: FontWeight.w400,
-            fontSize: 28,
-            //color: Colors.black,
-          ),
-          gradientDirection: GradientDirection.ttb,
-          colors: <Color>[
-            Color(0xFF3E6372),
-            Color(0xFF362345),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showCustomDialog(context);
-            },
-            icon: GradientIcon(
-              Icons.add_circle_outline_sharp,
-              30,
-              LinearGradient(
-                colors: <Color>[
-                  Color(0XFF28B6ED),
-                  Color(0XFFFA0AFF),
-                ],
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-        ],
-      ),
-*/
     );
   }
 }

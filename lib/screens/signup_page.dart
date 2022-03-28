@@ -1,10 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:concept/resources/auth_methods.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:concept/widget/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   final confirmPasswordEditingController = TextEditingController();
 
   bool _isLoading = false;
+  Uint8List? _image;
 
   @override
   void dispose() {
@@ -47,6 +49,7 @@ class _SignupPageState extends State<SignupPage> {
       username: usernameEditingController.text,
       email: emailEditingController.text,
       password: passwordEditingController.text,
+      file: _image!,
     );
 
     if (res == "success") {

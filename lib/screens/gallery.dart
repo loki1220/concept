@@ -5,85 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../layouts/mobile_screen_layout.dart';
-import 'asset_thumbnail.dart';
-
-// class AssetThumbnail extends StatefulWidget {
-//   const AssetThumbnail({
-//     Key? key,
-//     required this.asset,
-//   }) : super(key: key);
-//
-//   final AssetEntity asset;
-//
-//   @override
-//   State<AssetThumbnail> createState() => _AssetThumbnailState();
-// }
-
-// class _AssetThumbnailState extends State<AssetThumbnail> {
-//   @override
-//   Widget build(BuildContext context) {
-//     // We're using a FutureBuilder since thumbData is a future
-//     return FutureBuilder<Uint8List?>(
-//       future: widget.asset.thumbnailData,
-//       builder: (_, snapshot) {
-//         final bytes = snapshot.data;
-//
-//         // If we have no data, display a spinner
-//         if (bytes == null) {
-//           return CircularProgressIndicator();
-//         }
-//         // If there's data, display it as an image
-//         return InkWell(
-//             onTap: () {
-//               if (asset.type == AssetType.image) {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(
-//                     builder: (_) => ImageScreen(imageFile: asset.file),
-//                   ),
-//                 );
-//               }
-//               // setState(() {
-//               //   Gallery(
-//               //     // widget.asset!.file,
-//               //   );
-//               //   // Fluttertoast.showToast(
-//               //   //     msg: snapshot.data.toString(),
-//               //   //     toastLength: Toast.LENGTH_SHORT);
-//               // });
-//
-//               print(widget.asset!.toString());
-//             },
-//             /*Image.memory(bytes, fit: BoxFit.cover);*/
-//             child: Stack(children: [
-//               // Wrap the image in a Positioned.fill to fill the space
-//               Positioned.fill(
-//                 child: Image.memory(bytes, fit: BoxFit.cover),
-//               ),
-//               // Display a Play icon if the asset is a video
-//               if (widget.asset.type == AssetType.video)
-//                 Center(
-//                   child: Container(
-//                     color: Colors.blue,
-//                     child: Icon(
-//                       Icons.play_arrow,
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                 ),
-//             ]));
-//       },
-//     );
-//   }
-// }
+import 'dart:typed_data';
 
 class Gallery extends StatefulWidget {
   const Gallery({
     Key? key,
-    this.imageFile,
+    // this.imageFile,
   }) : super(key: key);
 
-  final Future<File?>? imageFile;
+  //final Future<File?>? imageFile;
 
   @override
   GalleryState createState() => GalleryState();
@@ -114,6 +44,7 @@ class GalleryState extends State<Gallery> {
     super.initState();
   }
 
+  int im = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,7 +91,9 @@ class GalleryState extends State<Gallery> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Image_Editor(),
+                            builder: (context) => Image_Editor(
+                              imageFile: assets[im].file,
+                            ),
                           ),
                         );
                       },
@@ -172,12 +105,12 @@ class GalleryState extends State<Gallery> {
           ),
           Container(
             height: MediaQuery.of(context).size.height * 0.45,
-            child: widget.imageFile != null
+            child: assets[im].file != null
                 ? Container(
                     // color: Colors.black,
                     alignment: Alignment.center,
                     child: FutureBuilder<File?>(
-                      future: widget.imageFile,
+                      future: assets[im].file,
                       builder: (_, snapshot) {
                         final file = snapshot.data;
                         if (file == null) return Container();
@@ -210,7 +143,43 @@ class GalleryState extends State<Gallery> {
                 ),
                 itemCount: assets.length,
                 itemBuilder: (_, index) {
-                  return AssetThumbnail(asset: assets[index]);
+                  return FutureBuilder<Uint8List?>(
+                    future: assets[index].thumbnailData,
+                    builder: (_, snapshot) {
+                      final bytes = snapshot.data;
+                      // If we have no data, display a spinner
+                      if (bytes == null) return CircularProgressIndicator();
+                      // If there's data, display it as an image
+                      return InkWell(
+                        onTap: () {
+                          if (assets[index].type == AssetType.image) {
+                            setState(() {
+                              im = index;
+                            });
+                          }
+                        },
+                        child: Stack(
+                          children: [
+                            // Wrap the image in a Positioned.fill to fill the space
+                            Positioned.fill(
+                              child: Image.memory(bytes, fit: BoxFit.cover),
+                            ),
+                            // Display a Play icon if the asset is a video
+                            if (assets[index].type == AssetType.video)
+                              Center(
+                                child: Container(
+                                  color: Colors.blue,
+                                  child: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),

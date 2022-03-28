@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../widget/utils.dart';
+
 class Details extends StatefulWidget {
   const Details(
       {Key? key,
@@ -29,7 +31,7 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   final _formKey = GlobalKey<FormState>();
 
-  Uint8List? _file;
+  Uint8List? _image;
 
   final picker = ImagePicker();
 
@@ -103,8 +105,9 @@ class _DetailsState extends State<Details> {
                       TextButton(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          final pickedFile = await picker.pickImage(
-                              source: ImageSource.camera);
+                          // final pickedFile = await picker.pickImage(
+                          //     source: ImageSource.camera);
+                          selectImageCamera();
                         },
                         child: Text(
                           "Take Photo",
@@ -122,8 +125,9 @@ class _DetailsState extends State<Details> {
                       TextButton(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          final pickedFile = await picker.pickImage(
-                              source: ImageSource.gallery);
+                          // final pickedFile = await picker.pickImage(
+                          //     source: ImageSource.gallery);
+                          selectImageGallery();
                         },
                         child: Text(
                           "Choose from library",
@@ -185,6 +189,22 @@ class _DetailsState extends State<Details> {
       });
     });
     super.initState();
+  }
+
+  selectImageGallery() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  selectImageCamera() async {
+    Uint8List im = await pickImage(ImageSource.camera);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -299,11 +319,10 @@ class _DetailsState extends State<Details> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white,
-                                // image: DecorationImage(
-                                //   fit: BoxFit.fill,
-                                //   image: NetworkImage(
-                                //       "https://images.unsplash.com/photo-1594899756066-46964fff3add?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=170&q=80"),
-                                // ),
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: MemoryImage(_image!),
+                                ),
                               ),
                             ),
                           ),

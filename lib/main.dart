@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         splashIconSize: double.maxFinite,
         centered: true,
         splashTransition: SplashTransition.fadeTransition,
-        nextScreen: Gallery(),
+        nextScreen: MobileScreenLayout(),
       ),
     );
   }

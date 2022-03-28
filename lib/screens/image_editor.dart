@@ -1,22 +1,24 @@
 import 'dart:io';
-
 import 'package:concept/screens/gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import 'image_confirm.dart';
 
 class Image_Editor extends StatefulWidget {
-  const Image_Editor({Key? key, this.imageFile}) : super(key: key);
+  const Image_Editor({Key? key, required this.imageFile}) : super(key: key);
 
-  final Future<File?>? imageFile;
+  final Future<File?> imageFile;
 
   @override
   State<Image_Editor> createState() => _Image_EditorState();
 }
 
 class _Image_EditorState extends State<Image_Editor> {
+  static List<AssetEntity> assets = [];
+  int im = 0;
   // final Future<File?> imageFile;
 
   @override
@@ -71,7 +73,9 @@ class _Image_EditorState extends State<Image_Editor> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Image_Confirm_Screen(),
+                        builder: (context) => Image_Confirm_Screen(
+                          imageFile: widget.imageFile,
+                        ),
                       ),
                     );
                   },
@@ -98,15 +102,28 @@ class _Image_EditorState extends State<Image_Editor> {
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Container(
             height: 350,
-            decoration: BoxDecoration(
-              // shape: BoxShape.rectangle,
-              color: Colors.black,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage("assets/editing.png"),
-              ),
+            // color: Colors.black,
+            alignment: Alignment.center,
+            child: FutureBuilder<File?>(
+              future: widget.imageFile, //assets[im].file,
+              builder: (_, snapshot) {
+                final file = snapshot.data;
+                if (file == null) return Container();
+                return Image.file(file);
+              },
             ),
           ),
+          // Container(
+          //   height: 350,
+          //   decoration: BoxDecoration(
+          //     // shape: BoxShape.rectangle,
+          //     color: Colors.black,
+          //     image: DecorationImage(
+          //       fit: BoxFit.fill,
+          //       image: AssetImage("assets/editing.png"),
+          //     ),
+          //   ),
+          // ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

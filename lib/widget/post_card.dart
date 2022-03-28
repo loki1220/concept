@@ -27,8 +27,8 @@ class _PostCardState extends State<PostCard> {
     return Container(
       // boundary needed for web
       decoration: BoxDecoration(
-        color: Colors.black,
-      ),
+          // color: Colors.black,
+          ),
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
@@ -54,8 +54,8 @@ class _PostCardState extends State<PostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Kailash",
-                          // widget.snap['username'].toString(),
+                          /* "Kailash",*/
+                          widget.snap['username'].toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -120,20 +120,20 @@ class _PostCardState extends State<PostCard> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.45,
                   width: double.infinity,
-                  child: Image.asset("postpic.png"),
-                  // child: widget.snap['isPhoto'] != null
-                  //     ? widget.snap['isPhoto'] == true
-                  //         ? Image.network(
-                  //             widget.snap['postUrl'].toString(),
-                  //             fit: BoxFit.cover,
-                  //           )
-                  //         : VideoPlayerItem(
-                  //             videoUrl: widget.snap['videoUrl'],
-                  //           )
-                  //     : Image.network(
-                  //         widget.snap['postUrl'].toString(),
-                  //         fit: BoxFit.cover,
+                  // child: Image.asset("postpic.png"),
+                  child: /*widget.snap['isPhoto'] != null
+                      ? widget.snap['isPhoto'] == true*/
+                      Image.network(
+                    widget.snap['postUrl'].toString(),
+                    fit: BoxFit.cover,
+                  ),
+                  //      VideoPlayerItem(
+                  //         videoUrl: widget.snap['videoUrl'],
                   //       )
+                  // : Image.network(
+                  //     widget.snap['postUrl'].toString(),
+                  //     fit: BoxFit.cover,
+                  //   )
                 ),
                 // AnimatedOpacity(
                 //   duration: const Duration(milliseconds: 200),
