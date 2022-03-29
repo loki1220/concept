@@ -6,6 +6,8 @@ import 'package:concept/widget/mytextfield.dart';
 import 'package:concept/widget/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import '../widget/gradient_icon.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -29,7 +31,10 @@ class _SignupPageState extends State<SignupPage> {
   final confirmPasswordEditingController = TextEditingController();
 
   bool _isLoading = false;
+
   Uint8List? _image;
+
+  final picker = ImagePicker();
 
   @override
   void dispose() {
@@ -46,11 +51,10 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     String res = await AuthMethods().signUpUser(
-      username: usernameEditingController.text,
-      email: emailEditingController.text,
-      password: passwordEditingController.text,
-      file: _image!,
-    );
+        username: usernameEditingController.text,
+        email: emailEditingController.text,
+        password: passwordEditingController.text,
+        file: _image!);
 
     if (res == "success") {
       setState(() {
@@ -66,6 +70,149 @@ class _SignupPageState extends State<SignupPage> {
       // show the error
       showSnackBar(context, res);
     }
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 700),
+      pageBuilder: (_, __, ___) {
+        return Center(
+          child: Container(
+            height: 350,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 45),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage("assets/dp1.png"),
+                        radius: 40,
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage("assets/dp2.png"),
+                        radius: 40,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage("assets/dp3.png"),
+                            radius: 40,
+                          ),
+                          SizedBox(
+                            width: 50,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage("assets/dp4.png"),
+                            radius: 40,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Divider(
+                        height: 2,
+                        thickness: 1,
+                        color: Color(0xFFE063FF).withOpacity(0.8),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          // final pickedFile = await picker.pickImage(
+                          //     source: ImageSource.camera);
+                          selectImageCamera();
+                        },
+                        child: Text(
+                          "Take Photo",
+                          style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Color(0xFF575757)),
+                        ),
+                      ),
+                      Divider(
+                        height: 2,
+                        thickness: 1,
+                        color: Color(0xFF28B6ED).withOpacity(0.8),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          // final pickedFile = await picker.pickImage(
+                          //     source: ImageSource.gallery);
+                          selectImageGallery();
+                        },
+                        child: Text(
+                          "Choose from library",
+                          style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Color(0xFF575757)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(18)),
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        Tween<Offset> tween;
+        if (anim.status == AnimationStatus.reverse) {
+          tween = Tween(begin: Offset(-1, 0), end: Offset.zero);
+        } else {
+          tween = Tween(begin: Offset(1, 0), end: Offset.zero);
+        }
+
+        return SlideTransition(
+          position: tween.animate(anim),
+          child: FadeTransition(
+            opacity: anim,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  selectImageGallery() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  selectImageCamera() async {
+    Uint8List im = await pickImage(ImageSource.camera);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -170,6 +317,106 @@ class _SignupPageState extends State<SignupPage> {
                                 fontSize: 19,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF1F1F1F)),
+                          ),
+                          Stack(
+                            children: [
+                              _image != null
+                                  ? Container(
+                                      width: 130,
+                                      height: 130,
+                                      child: Center(
+                                        child: Container(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              showCustomDialog(context);
+                                            },
+                                            icon: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 80, vertical: 80),
+                                              child: GradientIcon(
+                                                Icons.camera_alt_outlined,
+                                                40.0,
+                                                LinearGradient(
+                                                  colors: <Color>[
+                                                    Color(0xFFFA0AFF),
+                                                    Color(0xFF28B6ED),
+                                                  ],
+                                                  begin: Alignment.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          width: 125.0,
+                                          height: 125.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: MemoryImage(_image!),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Color(0xFF28B6ED),
+                                            Color(0xFFE063FF)
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 130,
+                                      height: 130,
+                                      child: Center(
+                                        child: Container(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              showCustomDialog(context);
+                                            },
+                                            icon: GradientIcon(
+                                              Icons.camera_alt_outlined,
+                                              40.0,
+                                              LinearGradient(
+                                                colors: <Color>[
+                                                  Color(0xFFFA0AFF),
+                                                  Color(0xFF28B6ED),
+                                                ],
+                                                begin: Alignment.center,
+                                              ),
+                                            ),
+                                          ),
+                                          width: 125.0,
+                                          height: 125.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: NetworkImage(
+                                                  'https://i.stack.imgur.com/l60Hf.png') /*MemoryImage(_image!)*/,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Color(0xFF28B6ED),
+                                            Color(0xFFE063FF)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                            ],
                           ),
                         ],
                       ),

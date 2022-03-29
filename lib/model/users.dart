@@ -12,7 +12,7 @@ class User {
     required this.username,
     required this.uid,
     required this.email,
-     required this.photoUrl,
+    required this.photoUrl,
     required this.followers,
     required this.following,
   });
@@ -23,10 +23,10 @@ class User {
     return User(
       uid: snapshot["uid"],
       email: snapshot["email"],
+      photoUrl: snapshot["photoUrl"],
       followers: snapshot["followers"],
       following: snapshot["following"],
       username: snapshot['username'],
-      photoUrl: snapshot["photoUrl"],
     );
   }
 

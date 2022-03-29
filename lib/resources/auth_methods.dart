@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concept/model/user_details.dart';
 import 'package:concept/resources/storage_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:concept/model/auth_users.dart' as model;
+import 'package:concept/model/users.dart' as model;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthMethods {
@@ -31,17 +32,16 @@ class AuthMethods {
       if (username.isNotEmpty ||
           email.isNotEmpty ||
           password.isNotEmpty ||
-          file == null) {
+          file != null) {
         // registering user in auth with email and password
-        UserCredential cred = await _auth
-            .createUserWithEmailAndPassword(
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
-        )
-            .catchError((e) {
-          Fluttertoast.showToast(
-              msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
-        });
+        );
+        //     .catchError((e) {
+        //   Fluttertoast.showToast(
+        //       msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
+        // });
 
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
@@ -49,8 +49,8 @@ class AuthMethods {
         model.User _user = model.User(
           username: username,
           uid: cred.user!.uid,
-          email: email,
           photoUrl: photoUrl,
+          email: email,
           following: [],
           followers: [],
         );

@@ -1,8 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:provider/provider.dart';
+import 'package:concept/model/users.dart' as model;
+import '../providers/user_providers.dart';
+import '../resources/firestore_methods.dart';
 import '../screens/comments_screen.dart';
+import 'gradient_icon.dart';
+import 'like_animating.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -22,7 +28,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final model.User user = Provider.of<UserProvider>(context).getUser;
+    // final width = MediaQuery.of(context).size.width;
 
     return Container(
       // boundary needed for web
@@ -135,26 +142,31 @@ class _PostCardState extends State<PostCard> {
                   //     fit: BoxFit.cover,
                   //   )
                 ),
-                // AnimatedOpacity(
-                //   duration: const Duration(milliseconds: 200),
-                //   opacity: isLikeAnimating ? 1 : 0,
-                //   child: LikeAnimation(
-                //     isAnimating: isLikeAnimating,
-                //     child: const Icon(
-                //       Icons.favorite,
-                //       color: Colors.white,
-                //       size: 100,
-                //     ),
-                //     duration: const Duration(
-                //       milliseconds: 400,
-                //     ),
-                //     onEnd: () {
-                //       setState(() {
-                //         isLikeAnimating = false;
-                //       });
-                //     },
-                //   ),
-                // ),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: isLikeAnimating ? 1 : 0,
+                  child: LikeAnimation(
+                    isAnimating: isLikeAnimating,
+                    child: GradientIcon(
+                      Icons.star_border,
+                      100,
+                      LinearGradient(
+                        colors: <Color>[
+                          Color(0XFF28B6ED),
+                          Color(0XFFFA0AFF),
+                        ],
+                      ),
+                    ),
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ),
+                    onEnd: () {
+                      setState(() {
+                        isLikeAnimating = false;
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -162,26 +174,35 @@ class _PostCardState extends State<PostCard> {
           // LIKE, COMMENT SECTION OF THE POST
           Row(
             children: <Widget>[
-              // LikeAnimation(
-              //   isAnimating: widget.snap['likes'].contains(user.uid),
-              //   smallLike: true,
-              //   child: IconButton(
-              //     icon: widget.snap['likes'].contains(user.uid)
-              //         ? const Icon(
-              //             Icons.favorite,
-              //             color: Colors.red,
-              //           )
-              //         : const Icon(
-              //             Icons.favorite_border,
-              //           ),
-              //     onPressed: () => FireStoreMethods().likePost(
-              //       widget.snap['postId'].toString(),
-              //       FirebaseAuth.instance.currentUser!.uid.toString(),
-              //       user.uid,
-              //       widget.snap['likes'],
-              //     ),
-              //   ),
-              // ),
+              LikeAnimation(
+                isAnimating: widget.snap['likes'].contains(user.uid),
+                smallLike: true,
+                child: IconButton(
+                  icon: widget.snap['likes'].contains(user.uid)
+                      ? GradientIcon(
+                          Icons.star_border,
+                          30,
+                          LinearGradient(
+                            colors: <Color>[
+                              Color(0XFFFA0AFF),
+                              Color(0XFFFFFFFF),
+                            ],
+                          ),
+                        ) /*GIcon(
+                          Icons.star_border,
+                          color: Colors.pinkAccent,
+                        )*/
+                      : const Icon(
+                          Icons.star_border,
+                        ),
+                  onPressed: () => FireStoreMethods().likePost(
+                    widget.snap['postId'].toString(),
+                    FirebaseAuth.instance.currentUser!.uid.toString(),
+                    user.uid,
+                    widget.snap['likes'],
+                  ),
+                ),
+              ),
               IconButton(
                 icon: const Icon(
                   Icons.mode_comment_outlined,

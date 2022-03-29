@@ -131,6 +131,19 @@ class GalleryState extends State<Gallery> {
                   ),
           ),
           Divider(),
+          Row(
+            children: <Widget>[
+              Text(
+                "Recents",
+                style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xFF000000),
+                ),
+              ),
+              Icon(Icons.photo_library_sharp),
+            ],
+          ),
           SingleChildScrollView(
             child: Container(
               height: MediaQuery.of(context).size.height / 3.0,

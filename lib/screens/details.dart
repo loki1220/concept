@@ -5,9 +5,11 @@ import 'package:concept/widget/gradient_icon.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../resources/auth_methods.dart';
 import '../widget/utils.dart';
 
 class Details extends StatefulWidget {
@@ -31,7 +33,11 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   final _formKey = GlobalKey<FormState>();
 
+  String user_id = "";
+
   Uint8List? _image;
+
+  bool _isLoading = false;
 
   final picker = ImagePicker();
 
@@ -207,6 +213,30 @@ class _DetailsState extends State<Details> {
     });
   }
 
+  // void userDetails() async {
+  //   // set loading to true
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //
+  //   String res = await AuthMethods().getUserProfiles(file: _image!);
+  //
+  //   if (res == "success") {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     // navigate to the home screen
+  //     Navigator.push(
+  //         context, MaterialPageRoute(builder: (context) => Started_Page()));
+  //   } else {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     // show the error
+  //     showSnackBar(context, res);
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     //nextbutton
@@ -229,12 +259,9 @@ class _DetailsState extends State<Details> {
           ),
           child: MaterialButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Started_Page(),
-                ),
-              );
+              // userDetails();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Started_Page()));
               FocusScope.of(context).unfocus();
             },
             child: Container(
@@ -293,47 +320,105 @@ class _DetailsState extends State<Details> {
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          width: 130,
-                          height: 130,
-                          child: Center(
-                            child: Container(
-                              child: IconButton(
-                                onPressed: () {
-                                  showCustomDialog(context);
-                                },
-                                icon: GradientIcon(
-                                  Icons.camera_alt_outlined,
-                                  40.0,
-                                  LinearGradient(
-                                    colors: <Color>[
-                                      Color(0xFFFA0AFF),
-                                      Color(0xFF28B6ED),
-                                    ],
-                                    begin: Alignment.center,
+                        Stack(
+                          children: [
+                            _image != null
+                                ? Container(
+                                    width: 130,
+                                    height: 130,
+                                    child: Center(
+                                      child: Container(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            showCustomDialog(context);
+                                          },
+                                          icon: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 80, vertical: 80),
+                                            child: GradientIcon(
+                                              Icons.camera_alt_outlined,
+                                              40.0,
+                                              LinearGradient(
+                                                colors: <Color>[
+                                                  Color(0xFFFA0AFF),
+                                                  Color(0xFF28B6ED),
+                                                ],
+                                                begin: Alignment.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        width: 125.0,
+                                        height: 125.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                          image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: MemoryImage(_image!),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(0xFF28B6ED),
+                                          Color(0xFFE063FF)
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    width: 130,
+                                    height: 130,
+                                    child: Center(
+                                      child: Container(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            showCustomDialog(context);
+                                          },
+                                          icon: GradientIcon(
+                                            Icons.camera_alt_outlined,
+                                            40.0,
+                                            LinearGradient(
+                                              colors: <Color>[
+                                                Color(0xFFFA0AFF),
+                                                Color(0xFF28B6ED),
+                                              ],
+                                              begin: Alignment.center,
+                                            ),
+                                          ),
+                                        ),
+                                        width: 125.0,
+                                        height: 125.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                          image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(
+                                                'https://i.stack.imgur.com/l60Hf.png') /*MemoryImage(_image!)*/,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(0xFF28B6ED),
+                                          Color(0xFFE063FF)
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              width: 125.0,
-                              height: 125.0,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: MemoryImage(_image!),
-                                ),
-                              ),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Color(0xFF28B6ED), Color(0xFFE063FF)],
-                            ),
-                          ),
+                          ],
                         ),
                         SizedBox(
                           height: 10,
