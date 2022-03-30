@@ -11,7 +11,7 @@ class Post {
   final String id;
   final String songName;
   final String caption;
-  // final bool isPhoto;
+  final bool isPhoto;
   final String videoUrl;
 
   const Post({
@@ -25,7 +25,7 @@ class Post {
     required this.id,
     required this.songName,
     required this.caption,
-    // required this.isPhoto,
+    required this.isPhoto,
     required this.videoUrl,
   });
 
@@ -43,7 +43,7 @@ class Post {
       id: snapshot['id'],
       songName: snapshot['songName'],
       caption: snapshot['caption'],
-      // isPhoto: snapshot['isPhoto'],
+      isPhoto: snapshot['isPhoto'],
       videoUrl: snapshot['videoUrl'],
     );
   }
@@ -59,7 +59,7 @@ class Post {
         "id": id,
         "songName": songName,
         "caption": caption,
-        // "isPhoto": isPhoto,
+        "isPhoto": isPhoto,
         "videoUrl": videoUrl,
       };
 }

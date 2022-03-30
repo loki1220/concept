@@ -41,7 +41,10 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       profImage = "",
       songName = "",
       caption = "",
-      videoUrl = "";
+      videoUrl = "",
+      isPhoto = "";
+
+  Uint8List? _file;
 
   bool isLoading = false;
 
@@ -98,8 +101,6 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
         ),
       );
 
-  Uint8List? _file;
-
   _fetch() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser;
     if (firebaseUser != null) {
@@ -144,7 +145,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
         id: "",
         songName: songName,
         caption: caption,
-        // isPhoto: isPhoto == "true" ? true : false,
+        isPhoto: isPhoto == "true" ? true : false,
         videoUrl: videoUrl,
       );
 

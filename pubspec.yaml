@@ -27,12 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  animated_splash_screen: ^1.2.0
-  font_awesome_flutter: ^9.2.0
-  google_fonts: ^2.3.1
   flutter:
     sdk: flutter
 
+  cupertino_icons: ^1.0.2
+  google_fonts: ^2.3.1
+  animated_splash_screen: ^1.2.0
+  font_awesome_flutter: ^9.2.0
   pinput: ^2.1.4
   syncfusion_flutter_sliders: ^19.4.55
   syncfusion_flutter_core: ^19.4.55
@@ -44,7 +45,6 @@ dependencies:
   cached_network_image: ^3.2.0
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
-  cupertino_icons: ^1.0.2
   fluttertoast: ^8.0.9
   cloud_firestore: ^3.1.10
   google_sign_in: ^5.2.4
@@ -53,6 +53,8 @@ dependencies:
   firebase_storage: ^10.2.3
   provider: ^6.0.2
   uuid: ^3.0.5
+  intl: ^0.17.0
+
 
 
   #storage_path: ^0.2.0
@@ -61,11 +63,6 @@ dependencies:
 
 
 dev_dependencies:
-
-
-
-
-
   flutter_test:
     sdk: flutter
 

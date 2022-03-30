@@ -132,6 +132,7 @@ class GalleryState extends State<Gallery> {
           ),
           Divider(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
                 "Recents",
@@ -141,7 +142,11 @@ class GalleryState extends State<Gallery> {
                   color: Color(0xFF000000),
                 ),
               ),
-              Icon(Icons.photo_library_sharp),
+              Icon(
+                Icons.photo_library_outlined,
+                size: 24,
+                color: Color(0xFF000000),
+              ),
             ],
           ),
           SingleChildScrollView(

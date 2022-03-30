@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:concept/screens/signup_page.dart';
+import 'package:concept/screens/started_page.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,9 +72,10 @@ class _LoginPageState extends State<LoginPage> {
               (uid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
                 Get.to(
-                  Details(
+                  Started_Page(),
+                  /* Details(
                     assetImage: 'assets/sliderstar.png',
-                  ),
+                  ),*/
                 ),
                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                 //     builder: (context) => MobileScreenLayout())),

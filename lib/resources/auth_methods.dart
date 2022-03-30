@@ -34,14 +34,15 @@ class AuthMethods {
           password.isNotEmpty ||
           file != null) {
         // registering user in auth with email and password
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+        UserCredential cred = await _auth
+            .createUserWithEmailAndPassword(
           email: email,
           password: password,
-        );
-        //     .catchError((e) {
-        //   Fluttertoast.showToast(
-        //       msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
-        // });
+        )
+            .catchError((e) {
+          Fluttertoast.showToast(
+              msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
+        });
 
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);

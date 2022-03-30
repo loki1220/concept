@@ -278,62 +278,113 @@ class _SignupPageState extends State<SignupPage> {
         //resizeToAvoidBottomInset: false,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/bgregister.png"),
-                  fit: BoxFit.fill,
-                ),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/bgregister.png"),
+                fit: BoxFit.fill,
               ),
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            "Hello Concept \n maker",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF000000)),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Welcome to the world \n of concepts!",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF1F1F1F)),
-                          ),
-                          Stack(
-                            children: [
-                              _image != null
-                                  ? Container(
-                                      width: 130,
-                                      height: 130,
-                                      child: Center(
-                                        child: Container(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              showCustomDialog(context);
-                                            },
-                                            icon: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 80, vertical: 80),
-                                              child: GradientIcon(
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Register",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF000000)),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "Profile",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF525252)),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Stack(
+                              children: [
+                                _image != null
+                                    ? Container(
+                                        width: 130,
+                                        height: 130,
+                                        child: Center(
+                                          child: Container(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                showCustomDialog(context);
+                                              },
+                                              icon: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 80,
+                                                    vertical: 80),
+                                                child: GradientIcon(
+                                                  Icons.camera_alt_outlined,
+                                                  40.0,
+                                                  LinearGradient(
+                                                    colors: <Color>[
+                                                      Color(0xFFFA0AFF),
+                                                      Color(0xFF28B6ED),
+                                                    ],
+                                                    begin: Alignment.center,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            width: 125.0,
+                                            height: 125.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.white,
+                                              image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: MemoryImage(_image!),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xFF28B6ED),
+                                              Color(0xFFE063FF)
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 130,
+                                        height: 130,
+                                        child: Center(
+                                          child: Container(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                showCustomDialog(context);
+                                              },
+                                              icon: GradientIcon(
                                                 Icons.camera_alt_outlined,
                                                 40.0,
                                                 LinearGradient(
@@ -345,198 +396,154 @@ class _SignupPageState extends State<SignupPage> {
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          width: 125.0,
-                                          height: 125.0,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: MemoryImage(_image!),
+                                            width: 125.0,
+                                            height: 125.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.white,
+                                              // image: DecorationImage(
+                                              //   fit: BoxFit.fill,
+                                              //   image: NetworkImage(
+                                              //       'https://i.stack.imgur.com/l60Hf.png') /*MemoryImage(_image!)*/,
+                                              // ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Color(0xFF28B6ED),
-                                            Color(0xFFE063FF)
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 130,
-                                      height: 130,
-                                      child: Center(
-                                        child: Container(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              showCustomDialog(context);
-                                            },
-                                            icon: GradientIcon(
-                                              Icons.camera_alt_outlined,
-                                              40.0,
-                                              LinearGradient(
-                                                colors: <Color>[
-                                                  Color(0xFFFA0AFF),
-                                                  Color(0xFF28B6ED),
-                                                ],
-                                                begin: Alignment.center,
-                                              ),
-                                            ),
-                                          ),
-                                          width: 125.0,
-                                          height: 125.0,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(
-                                                  'https://i.stack.imgur.com/l60Hf.png') /*MemoryImage(_image!)*/,
-                                            ),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xFF28B6ED),
+                                              Color(0xFFE063FF)
+                                            ],
                                           ),
                                         ),
                                       ),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Color(0xFF28B6ED),
-                                            Color(0xFFE063FF)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      MyTextField(
-                        autofocus: false,
-                        obscureText: false,
-                        isCenter: true,
-                        controller: usernameEditingController,
-                        fieldname: "Username",
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.next,
-                        helperText: "",
-                        validator: (value) {
-                          RegExp regex = RegExp(r'^.{3,}$');
-                          if (value!.isEmpty) {
-                            return ("Name cannot be Empty");
-                          }
-                          if (!regex.hasMatch(value)) {
-                            return ("Enter Valid name(Min. 3 Character)");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          usernameEditingController.text = value!;
-                        },
-                        maxLength: 30,
-                      ),
-                      MyTextField(
-                        autofocus: false,
-                        obscureText: false,
-                        isCenter: true,
-                        controller: emailEditingController,
-                        fieldname: "Enter email address",
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        helperText: "",
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("Please Enter Your Email");
-                          }
-                          // reg expression for email validation
-                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                              .hasMatch(value)) {
-                            return ("Please Enter a valid email");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          usernameEditingController.text = value!;
-                        },
-                      ),
-                      MyTextField(
-                        autofocus: false,
-                        obscureText: _secureText,
-                        // key: _formKey,
-                        isCenter: true,
-                        controller: passwordEditingController,
-                        fieldname: "password",
-                        textInputAction: TextInputAction.next,
-                        validator: (value) {
-                          RegExp regex = new RegExp(
-                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
-                          if (value!.isEmpty) {
-                            return ("Password is must for signup");
-                          }
-                          if (!regex.hasMatch(value)) {
-                            return ("Enter (Min. 8 letter, 1 Caps letter, 1 special letter, 1 Num)");
-                          }
-                        },
-                        onSaved: (value) {
-                          passwordEditingController.text = value!;
-                        },
-                        suffixbutton: IconButton(
-                          icon: Icon(
-                            _secureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _secureText = !_secureText;
-                            });
+                              ],
+                            ),
+                          ],
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: false,
+                          isCenter: true,
+                          controller: usernameEditingController,
+                          fieldname: "Username",
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          helperText: "",
+                          validator: (value) {
+                            RegExp regex = RegExp(r'^.{3,}$');
+                            if (value!.isEmpty) {
+                              return ("Name cannot be Empty");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("Enter Valid name(Min. 3 Character)");
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            usernameEditingController.text = value!;
+                          },
+                          maxLength: 30,
+                        ),
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: false,
+                          isCenter: true,
+                          controller: emailEditingController,
+                          fieldname: "Enter email address",
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          helperText: "",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return ("Please Enter Your Email");
+                            }
+                            // reg expression for email validation
+                            if (!RegExp(
+                                    "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                                .hasMatch(value)) {
+                              return ("Please Enter a valid email");
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            usernameEditingController.text = value!;
                           },
                         ),
-                      ),
-                      MyTextField(
-                        autofocus: false,
-                        obscureText: _securityText,
-                        isCenter: true,
-                        controller: confirmPasswordEditingController,
-                        fieldname: "Confirm Password",
-                        textInputAction: TextInputAction.done,
-                        helperText: "",
-                        validator: (value) {
-                          if (confirmPasswordEditingController.text !=
-                              passwordEditingController.text) {
-                            return "Password don't match";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          usernameEditingController.text = value!;
-                        },
-                        suffixbutton: IconButton(
-                          icon: Icon(
-                            _securityText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _securityText = !_securityText;
-                            });
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: _secureText,
+                          // key: _formKey,
+                          isCenter: true,
+                          controller: passwordEditingController,
+                          fieldname: "password",
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            RegExp regex = new RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
+                            if (value!.isEmpty) {
+                              return ("Password is must for signup");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("Enter (Min. 8 letter, 1 Caps letter, 1 special letter, 1 Num)");
+                            }
                           },
+                          onSaved: (value) {
+                            passwordEditingController.text = value!;
+                          },
+                          suffixbutton: IconButton(
+                            icon: Icon(
+                              _secureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _secureText = !_secureText;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                      registerButton,
-                    ],
+                        MyTextField(
+                          autofocus: false,
+                          obscureText: _securityText,
+                          isCenter: true,
+                          controller: confirmPasswordEditingController,
+                          fieldname: "Confirm Password",
+                          textInputAction: TextInputAction.done,
+                          helperText: "",
+                          validator: (value) {
+                            if (confirmPasswordEditingController.text !=
+                                passwordEditingController.text) {
+                              return "Password don't match";
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            usernameEditingController.text = value!;
+                          },
+                          suffixbutton: IconButton(
+                            icon: Icon(
+                              _securityText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _securityText = !_securityText;
+                              });
+                            },
+                          ),
+                        ),
+                        registerButton,
+                      ],
+                    ),
                   ),
                 ),
               ),
