@@ -44,6 +44,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       videoUrl = "",
       isPhoto = "";
 
+  late File imgFile;
+
   Uint8List? _file;
 
   bool isLoading = false;
@@ -128,6 +130,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
     });
 
     String res = "Some error";
+
     try {
       String docId = FirebaseFirestore.instance.collection('posts').doc().id;
 
@@ -306,9 +309,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // if (photoUrl != "")
-                      // CircleAvatar(
-                      //     backgroundImage:
-                      //         AssetImage("assets/loki.jpg") /*NetworkImage(photoUrl)*/),
+                      //   CircleAvatar(
+                      //       backgroundImage: AssetImage(
+                      //           "assets/loki.jpg") /* NetworkImage(photoUrl)*/),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.3,
                         child: TextFormField(
@@ -337,7 +340,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               future: widget.imageFile, //assets[im].file,
                               builder: (_, snapshot) {
                                 final file = snapshot.data;
-                                if (file == null) return Container();
+                                imgFile = file!;
+                                if (imgFile == null) return Container();
                                 return Image.file(file);
                               },
                             ),
@@ -538,7 +542,14 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           color: Color(0xFF5DB2EF),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            if (imgFile != null) {
+                              Uint8List imageRaw = await imgFile.readAsBytes();
+                              setState(() {
+                                _file = imageRaw;
+                                print('this path = $_file');
+                              });
+                            }
                             uploadImage().whenComplete(
                               () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(

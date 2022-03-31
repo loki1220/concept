@@ -20,7 +20,7 @@ class Gallery extends StatefulWidget {
 }
 
 class GalleryState extends State<Gallery> {
-  static List<AssetEntity> assets = [];
+  List<AssetEntity> assets = [];
 
   _fetchAssets() async {
     // Set onlyAll to true, to fetch only the 'Recent' album

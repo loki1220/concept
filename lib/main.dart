@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:concept/layouts/mobile_screen_layout.dart';
 import 'package:concept/screens/details.dart';
 import 'package:concept/screens/home_page.dart';
 import 'package:concept/screens/signup_page.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         splashIconSize: double.maxFinite,
         centered: true,
         splashTransition: SplashTransition.fadeTransition,
-        nextScreen: HomePage(),
+        nextScreen: MobileScreenLayout(),
       ),
     );
   }
