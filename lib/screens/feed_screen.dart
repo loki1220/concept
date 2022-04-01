@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
 import '../widget/global_variables.dart';
 import '../widget/post_card.dart';
 
@@ -247,6 +246,7 @@ class _FeedScreenState extends State<FeedScreen> {
               Color(0xFF362345),
             ],
           ),
+          centerTitle: false,
           actions: [
             IconButton(
               onPressed: () {
@@ -288,7 +288,42 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             );
           },
-        ), /* Column(
+        ), /*Padding(
+          padding: const EdgeInsets.symmetric(h8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GradientText(
+                "Concept",
+                style: GoogleFonts.rumRaisin(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 28,
+                ),
+                colors: const <Color>[
+                  Color(0xFF3E6372),
+                  Color(0xFF362345),
+                ],
+              ),
+              IconButton(
+                onPressed: () {
+                  showCustomDialog(context);
+                },
+                icon: GradientIcon(
+                  Icons.add_circle_outline_sharp,
+                  30,
+                  const LinearGradient(
+                    colors: <Color>[
+                      Color(0XFF28B6ED),
+                      Color(0XFFFA0AFF),
+                    ],
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),*/
+        /* Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

@@ -1,3 +1,4 @@
+import 'package:concept/widget/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,17 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   bool isPhoto = true;
 
+  deletePost(String postId) async {
+    try {
+      await FireStoreMethods().deletePost(postId);
+    } catch (err) {
+      showSnackBar(
+        context,
+        err.toString(),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
@@ -50,7 +62,11 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: <Widget>[
                 CircleAvatar(
-                    radius: 16, backgroundImage: AssetImage("profilepic.png")),
+                  radius: 16,
+                  backgroundImage: NetworkImage(
+                    widget.snap['profImage'].toString(),
+                  ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -61,7 +77,6 @@ class _PostCardState extends State<PostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          /* "Kailash",*/
                           widget.snap['username'].toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -93,6 +108,9 @@ class _PostCardState extends State<PostCard> {
                                           child: Text(e),
                                         ),
                                         onTap: () {
+                                          deletePost(
+                                            widget.snap['postId'].toString(),
+                                          );
                                           // remove the dialog box
                                           Navigator.of(context).pop();
                                         }),
@@ -111,12 +129,12 @@ class _PostCardState extends State<PostCard> {
           // IMAGE SECTION OF THE POST
           GestureDetector(
             onDoubleTap: () {
-              // FireStoreMethods().likePost(
-              //   widget.snap['postId'].toString(),
-              //   FirebaseAuth.instance.currentUser!.uid.toString(),
-              //   user.uid,
-              //   widget.snap['likes'],
-              // );
+              FireStoreMethods().likePost(
+                widget.snap['postId'].toString(),
+                FirebaseAuth.instance.currentUser!.uid.toString(),
+                user.uid,
+                widget.snap['likes'],
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -148,7 +166,7 @@ class _PostCardState extends State<PostCard> {
                   child: LikeAnimation(
                     isAnimating: isLikeAnimating,
                     child: GradientIcon(
-                      Icons.star_border,
+                      Icons.star_rate_outlined,
                       100,
                       LinearGradient(
                         colors: <Color>[
@@ -180,12 +198,12 @@ class _PostCardState extends State<PostCard> {
                 child: IconButton(
                   icon: widget.snap['likes'].contains(user.uid)
                       ? GradientIcon(
-                          Icons.star_border,
+                          Icons.star,
                           30,
                           LinearGradient(
                             colors: <Color>[
                               Color(0XFFFA0AFF),
-                              Color(0XFFFFFFFF),
+                              Color(0XFF28B6ED),
                             ],
                           ),
                         ) /*GIcon(
@@ -255,12 +273,16 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         TextSpan(
                           text: widget.snap['username'].toString(),
-                          style: const TextStyle(
+                          style: TextStyle(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: ' ${widget.snap['description']}',
+                          text: ' ${widget.snap['caption']}',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),

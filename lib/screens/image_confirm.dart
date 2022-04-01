@@ -147,7 +147,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
         profImage: photoUrl,
         id: "",
         songName: songName,
-        caption: caption,
+        caption: _captionController.text,
         isPhoto: isPhoto == "true" ? true : false,
         videoUrl: videoUrl,
       );
@@ -308,10 +308,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // if (photoUrl != "")
-                      //   CircleAvatar(
-                      //       backgroundImage: AssetImage(
-                      //           "assets/loki.jpg") /* NetworkImage(photoUrl)*/),
+                      if (photoUrl != "")
+                        CircleAvatar(backgroundImage: NetworkImage(photoUrl)),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.3,
                         child: TextFormField(
@@ -341,8 +339,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               builder: (_, snapshot) {
                                 final file = snapshot.data;
                                 imgFile = file!;
-                                if (imgFile == null) return Container();
-                                return Image.file(file);
+                                if (file == null) return Container();
+                                return Image.file(imgFile);
                               },
                             ),
                           ),

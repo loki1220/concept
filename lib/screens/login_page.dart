@@ -71,12 +71,18 @@ class _LoginPageState extends State<LoginPage> {
             .then(
               (uid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
-                Get.to(
-                  Started_Page(),
-                  /* Details(
-                    assetImage: 'assets/sliderstar.png',
-                  ),*/
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Started_Page(),
+                  ),
                 ),
+                // Get.to(
+                //   Started_Page(),
+                //   /* Details(
+                //     assetImage: 'assets/sliderstar.png',
+                //   ),*/
+                // ),
                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                 //     builder: (context) => MobileScreenLayout())),
               },
