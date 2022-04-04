@@ -4,23 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:video_player/video_player.dart';
 import '../layouts/mobile_screen_layout.dart';
 import 'dart:typed_data';
 
 class Gallery extends StatefulWidget {
   const Gallery({
     Key? key,
-    // this.imageFile,
+    // this.videoFile,
   }) : super(key: key);
 
-  //final Future<File?>? imageFile;
+  //final Future<File>? imageFile;
+  //final Future<File>? videoFile;
 
   @override
   GalleryState createState() => GalleryState();
 }
 
 class GalleryState extends State<Gallery> {
+  late VideoPlayerController _controller;
+
+  bool initialized = false;
+
   List<AssetEntity> assets = [];
+  List<File> videos = [];
 
   _fetchAssets() async {
     // Set onlyAll to true, to fetch only the 'Recent' album
@@ -31,7 +38,8 @@ class GalleryState extends State<Gallery> {
     // Now that we got the album, fetch all the assets it contains
     final recentAssets = await recentAlbum.getAssetListRange(
       start: 0, // start at index 0
-      end: 1000000, // end at a very big index (to get all the assets)
+      end: 1000000,
+      // end at a very big index (to get all the assets)
     );
 
     // Update the state and notify UI
@@ -41,14 +49,33 @@ class GalleryState extends State<Gallery> {
   @override
   void initState() {
     _fetchAssets();
+    // _initVideo();
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  _initVideo() {
+    final video = videos;
+    _controller = VideoPlayerController.file(video[im])
+      // Play the video again when it ends
+      ..setLooping(true)
+      // initialize the controller and notify UI when done
+      ..initialize().then((_) => setState(() => initialized = true));
+  }
+
   int im = 0;
+
+  bool galleryVideo = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           SizedBox(
@@ -103,33 +130,66 @@ class GalleryState extends State<Gallery> {
               )
             ],
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: assets[im].file != null
-                ? Container(
-                    // color: Colors.black,
-                    alignment: Alignment.center,
-                    child: FutureBuilder<File?>(
-                      future: assets[im].file,
-                      builder: (_, snapshot) {
-                        final file = snapshot.data;
-                        if (file == null) return Container();
-                        return Image.file(file);
-                      },
+          galleryVideo
+              ? Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.45,
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          // Use the VideoPlayer widget to display the video.
+                          child: VideoPlayer(_initVideo()),
+                        ),
+                      ),
                     ),
-                  )
-                : Container(
-                    child: GradientText(
-                      "Select Photo",
-                      style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.w400, fontSize: 25),
-                      colors: [
-                        Color(0xFF5DB2EF),
-                        Color(0xFFFA0AFF),
-                      ],
-                    ),
-                  ),
-          ),
+                    Center(
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_controller.value.isPlaying) {
+                              _controller.pause();
+                            } else {
+                              _controller.play();
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              : Container(
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  child: assets[im].file != null
+                      ? Container(
+                          // color: Colors.black,
+                          alignment: Alignment.center,
+                          child: FutureBuilder<File?>(
+                            future: assets[im].file,
+                            builder: (_, snapshot) {
+                              final file = snapshot.data;
+                              if (file == null) return Container();
+                              return Image.file(file);
+                            },
+                          ),
+                        )
+                      : Container(
+                          child: GradientText(
+                            "Select Photo",
+                            style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400, fontSize: 25),
+                            colors: [
+                              Color(0xFF5DB2EF),
+                              Color(0xFFFA0AFF),
+                            ],
+                          ),
+                        ),
+                ),
           Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,6 +230,11 @@ class GalleryState extends State<Gallery> {
                       // If there's data, display it as an image
                       return InkWell(
                         onTap: () {
+                          if (assets[index].type == AssetType.video) {
+                            setState(() {
+                              galleryVideo = true;
+                            });
+                          }
                           if (assets[index].type == AssetType.image) {
                             setState(() {
                               im = index;

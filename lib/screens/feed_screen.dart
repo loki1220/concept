@@ -246,6 +246,8 @@ class _FeedScreenState extends State<FeedScreen> {
               Color(0xFF362345),
             ],
           ),
+          elevation: 0,
+          automaticallyImplyLeading: false,
           centerTitle: false,
           actions: [
             IconButton(
@@ -288,90 +290,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             );
           },
-        ), /*Padding(
-          padding: const EdgeInsets.symmetric(h8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GradientText(
-                "Concept",
-                style: GoogleFonts.rumRaisin(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 28,
-                ),
-                colors: const <Color>[
-                  Color(0xFF3E6372),
-                  Color(0xFF362345),
-                ],
-              ),
-              IconButton(
-                onPressed: () {
-                  showCustomDialog(context);
-                },
-                icon: GradientIcon(
-                  Icons.add_circle_outline_sharp,
-                  30,
-                  const LinearGradient(
-                    colors: <Color>[
-                      Color(0XFF28B6ED),
-                      Color(0XFFFA0AFF),
-                    ],
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),*/
-        /* Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      GradientText("Concept",
-                          style: GoogleFonts.rumRaisin(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 28,
-                          ),
-                          colors: const <Color>[
-                            Color(0xFF3E6372),
-                            Color(0xFF362345),
-                          ])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          showCustomDialog(context);
-                        },
-                        icon: GradientIcon(
-                          Icons.add_circle_outline_sharp,
-                          30,
-                          const LinearGradient(
-                            colors: <Color>[
-                              Color(0XFF28B6ED),
-                              Color(0XFFFA0AFF),
-                            ],
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            const Divider(
-              height: 1,
-              color: Colors.pinkAccent,
-            ),
-          ],
-        ),*/
+        ),
       ),
     );
   }

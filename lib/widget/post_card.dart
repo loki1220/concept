@@ -2,6 +2,7 @@ import 'package:concept/widget/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:concept/model/users.dart' as model;
@@ -45,12 +46,12 @@ class _PostCardState extends State<PostCard> {
 
     return Container(
       // boundary needed for web
-      decoration: BoxDecoration(
-          // color: Colors.black,
-          ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.black,
+      // ),
+      // padding: const EdgeInsets.symmetric(
+      //   vertical: 10,
+      // ),
       child: Column(
         children: [
           // HEADER SECTION OF THE POST
@@ -70,7 +71,7 @@ class _PostCardState extends State<PostCard> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
-                      left: 8,
+                      left: 10,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -78,51 +79,69 @@ class _PostCardState extends State<PostCard> {
                       children: <Widget>[
                         Text(
                           widget.snap['username'].toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15.93,
+                            color: Color(0xFF000000),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                // widget.snap['uid'].toString() == user.uid
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      useRootNavigator: false,
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: ListView(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shrinkWrap: true,
-                              children: [
-                                'Delete',
-                              ]
-                                  .map(
-                                    (e) => InkWell(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12, horizontal: 16),
-                                          child: Text(e),
-                                        ),
-                                        onTap: () {
-                                          deletePost(
-                                            widget.snap['postId'].toString(),
-                                          );
-                                          // remove the dialog box
-                                          Navigator.of(context).pop();
-                                        }),
+                widget.snap['uid'].toString() == user.uid
+                    ? IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        onPressed: () {
+                          showDialog(
+                            useRootNavigator: false,
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                children: [
+                                  SimpleDialogOption(
+                                    onPressed: () {
+                                      deletePost(
+                                        widget.snap['postId'].toString(),
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Delete'),
                                   )
-                                  .toList()),
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
-                // Container(),
+                                ],
+                                // child: ListView(
+                                //     padding: const EdgeInsets.symmetric(
+                                //         vertical: 16),
+                                //     shrinkWrap: true,
+                                //     children: [
+                                //       'Delete',
+                                //       'Save',
+                                //     ]
+                                //         .map(
+                                //           (e) => InkWell(
+                                //               child: Container(
+                                //                 padding:
+                                //                     const EdgeInsets.symmetric(
+                                //                         vertical: 12,
+                                //                         horizontal: 16),
+                                //                 child: Text(e),
+                                //               ),
+                                //               onTap: () {
+                                //                 deletePost(
+                                //                   widget.snap['postId']
+                                //                       .toString(),
+                                //                 );
+                                //                 // remove the dialog box
+                                //                 Navigator.of(context).pop();
+                                //               }),
+                                //         )
+                                //         .toList()),
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : Container(),
               ],
             ),
           ),
