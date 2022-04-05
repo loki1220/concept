@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concept/screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,9 +24,6 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final picker = ImagePicker();
-  // Future<File?>? imageFile;
-
-  // final AssetEntity asset;
 
   Widget _slideButton() {
     return Material(
@@ -129,7 +127,11 @@ class _FeedScreenState extends State<FeedScreen> {
           // ),
         ),
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () async {
+            Navigator.of(context).pop();
+            final file = await FilePicker.platform.pickFiles();
+            if (file == null) return;
+          },
           child: Text(
             "Audio",
             textAlign: TextAlign.center,
@@ -163,7 +165,9 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ),
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Text(
             "Cancel",
             textAlign: TextAlign.center,

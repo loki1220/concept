@@ -242,7 +242,7 @@ class _PostCardState extends State<PostCard> {
               ),
               IconButton(
                 icon: const Icon(
-                  Icons.mode_comment_outlined,
+                  Icons.comment_bank_rounded,
                 ),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -254,7 +254,7 @@ class _PostCardState extends State<PostCard> {
               ),
               IconButton(
                   icon: const Icon(
-                    Icons.send,
+                    Icons.ios_share,
                   ),
                   onPressed: () {}),
               Expanded(

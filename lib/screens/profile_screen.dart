@@ -6,7 +6,8 @@ import '../resources/auth_methods.dart';
 import 'login_page.dart';
 
 class Profile_Screen extends StatefulWidget {
-  const Profile_Screen({Key? key}) : super(key: key);
+  final String? uid;
+  const Profile_Screen({Key? key, this.uid}) : super(key: key);
 
   @override
   State<Profile_Screen> createState() => _Profile_ScreenState();

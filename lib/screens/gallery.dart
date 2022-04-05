@@ -11,6 +11,7 @@ import 'dart:typed_data';
 class Gallery extends StatefulWidget {
   const Gallery({
     Key? key,
+
     // this.videoFile,
   }) : super(key: key);
 
@@ -22,12 +23,13 @@ class Gallery extends StatefulWidget {
 }
 
 class GalleryState extends State<Gallery> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
 
   bool initialized = false;
 
   List<AssetEntity> assets = [];
-  List<File> videos = [];
+
+  Future<File?>? videoFile;
 
   _fetchAssets() async {
     // Set onlyAll to true, to fetch only the 'Recent' album
@@ -55,13 +57,13 @@ class GalleryState extends State<Gallery> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
-  _initVideo() {
-    final video = videos;
-    _controller = VideoPlayerController.file(video[im])
+  _initVideo() async {
+    final video = await videoFile;
+    _controller = VideoPlayerController.file(video!)
       // Play the video again when it ends
       ..setLooping(true)
       // initialize the controller and notify UI when done
@@ -137,9 +139,12 @@ class GalleryState extends State<Gallery> {
                       height: MediaQuery.of(context).size.height * 0.45,
                       child: Center(
                         child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          // Use the VideoPlayer widget to display the video.
-                          child: VideoPlayer(_initVideo()),
+                          aspectRatio: _controller!.value.aspectRatio,
+                          child: _controller != null
+                              ? VideoPlayer(_controller!)
+                              : Container(
+                                  child: Text("loki"),
+                                ),
                         ),
                       ),
                     ),
@@ -147,15 +152,15 @@ class GalleryState extends State<Gallery> {
                       child: IconButton(
                         onPressed: () {
                           setState(() {
-                            if (_controller.value.isPlaying) {
-                              _controller.pause();
+                            if (_controller!.value.isPlaying) {
+                              _controller!.pause();
                             } else {
-                              _controller.play();
+                              _controller!.play();
                             }
                           });
                         },
                         icon: Icon(
-                          _controller.value.isPlaying
+                          _controller!.value.isPlaying
                               ? Icons.pause
                               : Icons.play_arrow,
                         ),
@@ -233,6 +238,8 @@ class GalleryState extends State<Gallery> {
                           if (assets[index].type == AssetType.video) {
                             setState(() {
                               galleryVideo = true;
+                              videoFile = assets[im].file;
+                              _initVideo();
                             });
                           }
                           if (assets[index].type == AssetType.image) {
@@ -240,6 +247,19 @@ class GalleryState extends State<Gallery> {
                               im = index;
                             });
                           }
+                          // if (assets[index].type == AssetType.video) {
+                          //   setState(() {
+                          //     im = index;
+                          //   });
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (_) => VideoScreen(
+                          //         videoFile: assets[im].file,
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
                         },
                         child: Stack(
                           children: [
