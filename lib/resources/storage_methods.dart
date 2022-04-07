@@ -14,7 +14,7 @@ class StorageMethods {
   //upload video
 
   Future<String> uploadVideoToStorage(
-      String childName, videoPath, bool isPost) async {
+      String childName, bool isPost) async {
     Reference ref = firebaseStorage
         .ref()
         .child('posts/videos')
@@ -25,7 +25,7 @@ class StorageMethods {
       ref = ref.child(id);
     }
 
-    UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
+    UploadTask uploadTask = ref.putFile(await _compressVideo(childName));
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;

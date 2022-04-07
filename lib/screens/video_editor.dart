@@ -13,6 +13,7 @@ class Video_Editor extends StatefulWidget {
 
   final Future<File?> videoFile;
 
+
   @override
   State<Video_Editor> createState() => _Video_EditorState();
 }
@@ -162,6 +163,14 @@ class _Video_EditorState extends State<Video_Editor> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.cut,
+                    size: 24,
+                    color: Color(0xFF575757),
+                  ),
+                ),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(

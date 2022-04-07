@@ -545,8 +545,10 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                             if (imgFile != null) {
                               Uint8List imageRaw = await imgFile.readAsBytes();
                               setState(() {
+
                                 _file = imageRaw;
                                 print('this path = $_file');
+                                isPhoto = "";
                               });
                             }
                             uploadImage().whenComplete(

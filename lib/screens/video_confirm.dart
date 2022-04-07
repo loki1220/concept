@@ -131,7 +131,7 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
     }
   }
 
-  uploadVideo(String songName, String caption, String videoPath) async {
+  uploadVideo( String caption) async {
     setState(() {
       isLoading = true;
     });
@@ -141,13 +141,8 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
     try {
       String docId = FirebaseFirestore.instance.collection('posts').doc().id;
 
-      /*String profImage =
-          await StorageMethods().uploadImageToStorage('posts', _file!, true);*/
-
-      // var allDocs = await firestore.collection('posts').get();
-      /*int len = docId.docs.length;*/
       String videoUrl =
-      await StorageMethods().uploadVideoToStorage('posts', videoPath, true);
+      await StorageMethods().uploadVideoToStorage('posts', true);
 
       Post post = Post(
         uid: user_id,
@@ -395,16 +390,38 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
                       Container(
                         height: 90.0,
                         width: 80.0,
-                        child: Container(
-                          height: 350,
-                          // color: Colors.black,
-                          alignment: Alignment.center,
-                          child: Center(
-                              child: AspectRatio(
-                                aspectRatio: _controller!.value.aspectRatio,
-                                child: VideoPlayer(_controller!),
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 350,
+                              // color: Colors.black,
+                              alignment: Alignment.center,
+                              child: Center(
+                                  child: AspectRatio(
+                                    aspectRatio: _controller!.value.aspectRatio,
+                                    child: VideoPlayer(_controller!),
+                                  ),
                               ),
-                          ),
+                            ),
+                            Center(
+                              child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (_controller!.value.isPlaying) {
+                                      _controller!.pause();
+                                    } else {
+                                      _controller!.play();
+                                    }
+                                  });
+                                },
+                                icon: Icon(
+                                  _controller!.value.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                  color: Color(0xFFFFFFFF).withOpacity(0.75),size: 30,),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -585,21 +602,15 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
                           color: Color(0xFF5DB2EF),
                         ),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            // if (imgFile != null) {
-                            //   Uint8List imageRaw = await imgFile.readAsBytes();
-                            //   setState(() {
-                            //     _file = imageRaw;
-                            //     print('this path = $_file');
-                            //   });
-                            // }
-                            // uploadImage().whenComplete(
-                            //       () => Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(
-                            //       builder: (context) => MobileScreenLayout(),
-                            //     ),
-                            //   ),
-                            // );
+                          onPressed: () {
+
+                            uploadVideo(_captionController.text).whenComplete(
+                                  () => Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => MobileScreenLayout(),
+                                ),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
