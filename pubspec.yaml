@@ -60,6 +60,7 @@ dependencies:
   file_picker: ^4.3.3
   audioplayers: ^0.20.1
   audioplayer: ^0.8.1
+  video_compress: ^3.1.0
 
 
 

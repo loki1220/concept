@@ -3,17 +3,13 @@ import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:concept/layouts/mobile_screen_layout.dart';
 import 'package:concept/providers/user_providers.dart';
-import 'package:concept/screens/details.dart';
+import 'package:concept/screens/gallery.dart';
 import 'package:concept/screens/home_page.dart';
-import 'package:concept/screens/signup_page.dart';
-import 'package:concept/trial/image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import 'layouts/responsive_layouts.dart';
 
 Future<void> main() async {
@@ -85,7 +81,7 @@ class MyApp extends StatelessWidget {
               splashIconSize: double.maxFinite,
               centered: true,
               splashTransition: SplashTransition.fadeTransition,
-              nextScreen: MobileScreenLayout(),
+              nextScreen: HomePage(),
             );
           },
         ),
@@ -94,4 +90,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//Loki cloned
+//Loki cloned service updated on 07/04/2022

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:concept/screens/image_editor.dart';
+import 'package:concept/screens/video_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -29,7 +30,7 @@ class GalleryState extends State<Gallery> {
 
   List<AssetEntity> assets = [];
 
-  Future<File?>? videoFile;
+  // Future<File?>? videoFile;
 
   _fetchAssets() async {
     // Set onlyAll to true, to fetch only the 'Recent' album
@@ -51,7 +52,7 @@ class GalleryState extends State<Gallery> {
   @override
   void initState() {
     _fetchAssets();
-    // _initVideo();
+    _initVideo();
     super.initState();
   }
 
@@ -62,7 +63,7 @@ class GalleryState extends State<Gallery> {
   }
 
   _initVideo() async {
-    final video = await videoFile;
+    final video = await assets[im].file;
     _controller = VideoPlayerController.file(video!)
       // Play the video again when it ends
       ..setLooping(true)
@@ -120,9 +121,13 @@ class GalleryState extends State<Gallery> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Image_Editor(
-                              imageFile: assets[im].file,
-                            ),
+                            builder: (_) {
+                              if (assets[im].type ==  AssetType.image) {
+                                return Image_Editor(imageFile: assets[im].file);
+                              }else {
+                                return Video_Editor(videoFile: assets[im].file);
+                              }
+                            },
                           ),
                         );
                       },
@@ -133,6 +138,7 @@ class GalleryState extends State<Gallery> {
             ],
           ),
           galleryVideo
+          // initialized
               ? Stack(
                   children: [
                     Container(
@@ -148,21 +154,24 @@ class GalleryState extends State<Gallery> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (_controller!.value.isPlaying) {
-                              _controller!.pause();
-                            } else {
-                              _controller!.play();
-                            }
-                          });
-                        },
-                        icon: Icon(
-                          _controller!.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 10),
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (_controller!.value.isPlaying) {
+                                _controller!.pause();
+                              } else {
+                                _controller!.play();
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            _controller!.value.isPlaying
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                          color: Color(0xFFFFFFFF).withOpacity(0.75),size: 70,),
                         ),
                       ),
                     )
@@ -194,7 +203,7 @@ class GalleryState extends State<Gallery> {
                             ],
                           ),
                         ),
-                ),
+                ),/*: Center(child: CircularProgressIndicator(),),*/
           Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,28 +247,16 @@ class GalleryState extends State<Gallery> {
                           if (assets[index].type == AssetType.video) {
                             setState(() {
                               galleryVideo = true;
-                              videoFile = assets[im].file;
                               _initVideo();
+                              im = index;
                             });
                           }
                           if (assets[index].type == AssetType.image) {
                             setState(() {
+                              galleryVideo = false;
                               im = index;
                             });
                           }
-                          // if (assets[index].type == AssetType.video) {
-                          //   setState(() {
-                          //     im = index;
-                          //   });
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (_) => VideoScreen(
-                          //         videoFile: assets[im].file,
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
                         },
                         child: Stack(
                           children: [
