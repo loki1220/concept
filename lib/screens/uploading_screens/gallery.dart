@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:concept/screens/image_editor.dart';
-import 'package:concept/screens/video_editor.dart';
+import 'package:concept/screens/uploading_screens/image_editor.dart';
+import 'package:concept/screens/uploading_screens/video_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
-import '../layouts/mobile_screen_layout.dart';
+import '../../layouts/mobile_screen_layout.dart';
 import 'dart:typed_data';
 
 class Gallery extends StatefulWidget {
@@ -26,7 +26,7 @@ class Gallery extends StatefulWidget {
 class GalleryState extends State<Gallery> {
   VideoPlayerController? _controller;
 
-  bool initialized = false;
+  //bool initialized = false;
 
   List<AssetEntity> assets = [];
 
@@ -52,7 +52,7 @@ class GalleryState extends State<Gallery> {
   @override
   void initState() {
     _fetchAssets();
-    _initVideo();
+   // _initVideo();
     super.initState();
   }
 
@@ -64,11 +64,15 @@ class GalleryState extends State<Gallery> {
 
   _initVideo() async {
     final video = await assets[im].file;
-    _controller = VideoPlayerController.file(video!)
+    print("loki this is video ${video}");
+    setState(() {
+      _controller =video!=null? VideoPlayerController.file(video):null
       // Play the video again when it ends
-      ..setLooping(true)
+          ?.setLooping(true)
       // initialize the controller and notify UI when done
-      ..initialize().then((_) => setState(() => initialized = true));
+        ..initialize().then((_) => setState(() {}));
+    });
+
   }
 
   int im = 0;
@@ -249,6 +253,9 @@ class GalleryState extends State<Gallery> {
                               galleryVideo = true;
                               _initVideo();
                               im = index;
+                            });
+                            setState(() {
+
                             });
                           }
                           if (assets[index].type == AssetType.image) {

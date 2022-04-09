@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concept/screens/gallery.dart';
+import 'package:concept/screens/uploading_screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

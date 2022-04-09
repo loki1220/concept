@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:concept/screens/gallery.dart';
-import 'package:concept/screens/video_confirm.dart';
+import 'package:concept/screens/uploading_screens/gallery.dart';
+import 'package:concept/screens/uploading_screens/video_confirm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';

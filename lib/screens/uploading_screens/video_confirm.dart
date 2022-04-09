@@ -1,37 +1,34 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:video_player/video_player.dart';
+import '../../layouts/mobile_screen_layout.dart';
+import '../../model/post.dart';
+import '../../resources/storage_methods.dart';
+import '../../widget/global_variables.dart';
+import '../../widget/utils.dart';
 
-import '../layouts/mobile_screen_layout.dart';
-import '../model/post.dart';
-import '../resources/storage_methods.dart';
-import '../widget/utils.dart';
-
-class Image_Confirm_Screen extends StatefulWidget {
-  const Image_Confirm_Screen({Key? key, required this.imageFile})
+class Video_Confirm_Screen extends StatefulWidget {
+  const Video_Confirm_Screen({Key? key, required this.videoFile})
       : super(key: key);
 
-  final Future<File?> imageFile;
+  final Future<File?> videoFile;
 
   @override
-  State<Image_Confirm_Screen> createState() => _Image_Confirm_ScreenState();
+  State<Video_Confirm_Screen> createState() => Video_Confirm_ScreenState();
 }
 
-class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
+class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
   int im = 0;
 
-  @override
-  void initState() {
-    _fetch();
-    super.initState();
-  }
+
 
   String photoUrl = "",
       userName = "",
@@ -44,64 +41,74 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       videoUrl = "",
       isPhoto = "";
 
-  late File imgFile;
 
-  Uint8List? _file;
 
   bool isLoading = false;
+
+  bool initialized = false;
 
   bool value1 = false;
   bool value2 = false;
   bool value3 = false;
 
   final TextEditingController _captionController = TextEditingController();
+  VideoPlayerController? _controller;
 
-  // Widget buildSwitch() => Transform.scale(
-  //       scale: 1,
-  //       child: Switch.adaptive(
-  //         thumbColor: MaterialStateProperty.all(Colors.red),
-  //         trackColor: MaterialStateProperty.all(Colors.orange),
-  //
-  //         // activeColor: Colors.blueAccent,
-  //         // activeTrackColor: Colors.blue.withOpacity(0.4),
-  //         // inactiveThumbColor: Colors.orange,
-  //         // inactiveTrackColor: Colors.black87,
-  //         splashRadius: 10,
-  //         value: value,
-  //         onChanged: (value) => setState(() => this.value = value),
-  //       ),
-  //     );
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    _captionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _fetch();
+    _initVideo();
+    super.initState();
+  }
+
+  _initVideo() async {
+    final video = await widget.videoFile;
+    _controller = VideoPlayerController.file(video!)
+    // Play the video again when it ends
+      ..setLooping(true)
+    // initialize the controller and notify UI when done
+      ..initialize().then((_) => setState(() => initialized = true));
+  }
+
 
   Widget buildToggleSwitch1() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value1,
-          onChanged: (value) => setState(() => this.value1 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value1,
+      onChanged: (value) => setState(() => this.value1 = value),
+    ),
+  );
   Widget buildToggleSwitch2() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value2,
-          onChanged: (value) => setState(() => this.value2 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value2,
+      onChanged: (value) => setState(() => this.value2 = value),
+    ),
+  );
   Widget buildToggleSwitch3() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value3,
-          onChanged: (value) => setState(() => this.value3 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value3,
+      onChanged: (value) => setState(() => this.value3 = value),
+    ),
+  );
 
   _fetch() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser;
@@ -124,7 +131,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
     }
   }
 
-  Future<String> uploadImage() async {
+  uploadVideo( String caption) async {
     setState(() {
       isLoading = true;
     });
@@ -134,8 +141,10 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
     try {
       String docId = FirebaseFirestore.instance.collection('posts').doc().id;
 
-      String profImage =
-          await StorageMethods().uploadImageToStorage('posts', _file!, false);
+      String user_id =
+      await StorageMethods().uploadVideoToStorage('posts', true).catchError((e){
+        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
+      });
 
       Post post = Post(
         uid: user_id,
@@ -152,19 +161,15 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
         videoUrl: videoUrl,
       );
 
-      FirebaseFirestore.instance
-          .collection('posts')
-          .doc(docId)
-          .set(post.toJson());
-
-      FirebaseFirestore.instance
+      await firestore.collection('posts').doc(docId).set(
+        post.toJson(),
+      );
+      firestore
           .collection('users')
           .doc(user_id)
           .collection("MyPosts")
           .doc(docId)
           .set(post.toJson());
-      res = "Success";
-
       if (res == "Success") {
         setState(() {
           isLoading = false;
@@ -173,34 +178,21 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
           context,
           'Posted! :)',
         );
-        clearImage();
+        //clearVideo();
       } else {
         showSnackBar(context, res);
       }
+
+      Get.back();
     } catch (e) {
-      res = e.toString();
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(
-        context,
+      Get.snackbar(
+        'Error Uploading Video',
         e.toString(),
       );
     }
-    return res;
   }
 
-  void clearImage() {
-    setState(() {
-      _file = null;
-    });
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _captionController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -321,41 +313,45 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF9E9E9E),
                               ),
-                              border: InputBorder.none),
+                              border: InputBorder.none,),
                           maxLines: 5,
                         ),
                       ),
                       Container(
-                        height: 120.0,
+                        height: 90.0,
                         width: 80.0,
-                        child: AspectRatio(
-                          aspectRatio: 487 / 451,
-                          child: Container(
-                            height: 350,
-                            decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0)),
-                            alignment: Alignment.center,
-                            child: FutureBuilder<File?>(
-                              future: widget.imageFile, //assets[im].file,
-                              builder: (_, snapshot) {
-                                final file = snapshot.data;
-                                imgFile = file!;
-                                if (file == null) return Container();
-                                return Image.file(imgFile);
-                              },
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 350,
+                              // color: Colors.black,
+                              alignment: Alignment.center,
+                              child: Center(
+                                  child: AspectRatio(
+                                    aspectRatio: _controller!.value.aspectRatio,
+                                    child: VideoPlayer(_controller!),
+                                  ),
+                              ),
                             ),
-                          ),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(8.0),
-                          //     image: DecorationImage(
-                          //       fit: BoxFit.fill,
-                          //       alignment: FractionalOffset.topCenter,
-                          //       image: AssetImage(
-                          //           "assets/editing.png") /*MemoryImage(_file!)*/,
-                          //     ),
-                          //   ),
-                          // ),
+                            Center(
+                              child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (_controller!.value.isPlaying) {
+                                      _controller!.pause();
+                                    } else {
+                                      _controller!.play();
+                                    }
+                                  });
+                                },
+                                icon: Icon(
+                                  _controller!.value.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                  color: Color(0xFFFFFFFF).withOpacity(0.75),size: 30,),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -411,11 +407,6 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                                 ),
                               ),
                               buildToggleSwitch1(),
-                              // GFToggle(
-                              //   onChanged: null,
-                              //   value: true,
-                              //   type: GFToggleType.ios,
-                              // )
                             ],
                           ),
                         ),
@@ -541,18 +532,10 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           color: Color(0xFF5DB2EF),
                         ),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            if (imgFile != null) {
-                              Uint8List imageRaw = await imgFile.readAsBytes();
-                              setState(() {
+                          onPressed: () {
 
-                                _file = imageRaw;
-                                print('this path = $_file');
-                                isPhoto = "";
-                              });
-                            }
-                            uploadImage().whenComplete(
-                              () => Navigator.of(context).pushReplacement(
+                            uploadVideo(_captionController.text).whenComplete(
+                                  () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) => MobileScreenLayout(),
                                 ),
