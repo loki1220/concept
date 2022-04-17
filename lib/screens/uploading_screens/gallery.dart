@@ -26,6 +26,9 @@ class Gallery extends StatefulWidget {
 class GalleryState extends State<Gallery> {
   VideoPlayerController? _controller;
 
+  String? videoPath;
+
+
   //bool initialized = false;
 
   List<AssetEntity> assets = [];
@@ -66,6 +69,7 @@ class GalleryState extends State<Gallery> {
     final video = await assets[im].file;
     print("loki this is video ${video}");
     setState(() {
+      videoPath = video?.path;
       _controller =video!=null? VideoPlayerController.file(video):null
       // Play the video again when it ends
           ?.setLooping(true)
@@ -129,7 +133,7 @@ class GalleryState extends State<Gallery> {
                               if (assets[im].type ==  AssetType.image) {
                                 return Image_Editor(imageFile: assets[im].file);
                               }else {
-                                return Video_Editor(videoFile: assets[im].file);
+                                return Video_Editor(videoFile: assets[im].file, videoPath: videoPath!,);
                               }
                             },
                           ),

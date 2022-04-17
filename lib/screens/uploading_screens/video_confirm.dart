@@ -16,10 +16,12 @@ import '../../widget/global_variables.dart';
 import '../../widget/utils.dart';
 
 class Video_Confirm_Screen extends StatefulWidget {
-  const Video_Confirm_Screen({Key? key, required this.videoFile})
+  const Video_Confirm_Screen({Key? key, required this.videoFile, required this.videoPath})
       : super(key: key);
 
   final Future<File?> videoFile;
+  final String videoPath;
+
 
   @override
   State<Video_Confirm_Screen> createState() => Video_Confirm_ScreenState();
@@ -39,6 +41,7 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
       songName = "",
       caption = "",
       videoUrl = "",
+      videoPath = "",
       isPhoto = "";
 
 
@@ -71,6 +74,9 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
 
   _initVideo() async {
     final video = await widget.videoFile;
+    setState(() {
+      videoPath = widget.videoPath;
+    });
     _controller = VideoPlayerController.file(video!)
     // Play the video again when it ends
       ..setLooping(true)
@@ -131,7 +137,7 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
     }
   }
 
-  uploadVideo( String caption) async {
+  uploadVideo( String caption , String videoPath) async {
     setState(() {
       isLoading = true;
     });
@@ -141,8 +147,8 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
     try {
       String docId = FirebaseFirestore.instance.collection('posts').doc().id;
 
-      String user_id =
-      await StorageMethods().uploadVideoToStorage('posts', true).catchError((e){
+      String videoUrl =
+      await StorageMethods().uploadVideoToStorage("post", videoPath , true).catchError((e){
         Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
       });
 
@@ -265,7 +271,7 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
                             style: GoogleFonts.roboto(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
-                              color: Color(0xFF000000),
+                              color: const Color(0xFF000000),
                             ),
                           )),
                     ],
@@ -534,7 +540,7 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
                         child: ElevatedButton(
                           onPressed: () {
 
-                            uploadVideo(_captionController.text).whenComplete(
+                            uploadVideo(_captionController.text, widget.videoPath).whenComplete(
                                   () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) => MobileScreenLayout(),

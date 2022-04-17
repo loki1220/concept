@@ -9,9 +9,11 @@ import 'package:video_player/video_player.dart';
 import 'image_confirm.dart';
 
 class Video_Editor extends StatefulWidget {
-  const Video_Editor({Key? key, required this.videoFile}) : super(key: key);
+  const Video_Editor({Key? key, required this.videoFile, required this.videoPath}) : super(key: key);
 
   final Future<File?> videoFile;
+  final String videoPath;
+
 
 
   @override
@@ -22,7 +24,10 @@ class _Video_EditorState extends State<Video_Editor> {
 
   VideoPlayerController? _controller;
 
+  String? videoPath;
+
   bool initialized = false;
+  bool isLoading = false;
 
 
   @override
@@ -39,16 +44,24 @@ class _Video_EditorState extends State<Video_Editor> {
 
   _initVideo() async {
     final video = await widget.videoFile;
+    setState(() {
+      videoPath = widget.videoPath;
+    });
     _controller = VideoPlayerController.file(video!)
     // Play the video again when it ends
       ..setLooping(true)
+
     // initialize the controller and notify UI when done
-      ..initialize().then((_) => setState(() => initialized = true));
+      ..initialize().then((_) => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  isLoading
+        ?  Center(
+         child: const CircularProgressIndicator(),
+         )
+        : Scaffold(
         body: Column(
           children: <Widget>[
             SizedBox(
@@ -99,7 +112,7 @@ class _Video_EditorState extends State<Video_Editor> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Video_Confirm_Screen(
-                              videoFile: widget.videoFile,
+                              videoFile: widget.videoFile, videoPath: videoPath!,
                             ),
                           ),
                         );

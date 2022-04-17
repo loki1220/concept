@@ -1,4 +1,5 @@
 import 'package:concept/widget/utils.dart';
+import 'package:concept/widget/video_player_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -162,23 +163,21 @@ class _PostCardState extends State<PostCard> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  width: double.infinity,
-                  // child: Image.asset("postpic.png"),
-                  child: /*widget.snap['isPhoto'] != null
-                      ? widget.snap['isPhoto'] == true*/
-                      Image.network(
-                    widget.snap['postUrl'].toString(),
-                    fit: BoxFit.cover,
-                  ),
-                  //      VideoPlayerItem(
-                  //         videoUrl: widget.snap['videoUrl'],
-                  //       )
-                  // : Image.network(
-                  //     widget.snap['postUrl'].toString(),
-                  //     fit: BoxFit.cover,
-                  //   )
-                ),
+                    height: MediaQuery.of(context).size.height * 0.45,
+                    width: double.infinity,
+                    child: widget.snap['isPhoto'] != null
+                        ? widget.snap['isPhoto'] == true
+                        ? Image.network(
+                      widget.snap['postUrl'].toString(),
+                      fit: BoxFit.cover,
+                    )
+                        : VideoPlayerItem(
+                      videoUrl: widget.snap['videoUrl'],
+                    )
+                        : Image.network(
+                      widget.snap['postUrl'].toString(),
+                      fit: BoxFit.cover,
+                    )),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isLikeAnimating ? 1 : 0,

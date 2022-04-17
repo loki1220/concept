@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concept/screens/post_list_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../resources/auth_methods.dart';
-import '../resources/firestore_methods.dart';
-import '../widget/follow_button.dart';
 import '../widget/utils.dart';
 import 'login_page.dart';
 
