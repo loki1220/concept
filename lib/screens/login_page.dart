@@ -1,21 +1,15 @@
 import 'dart:async';
-
 import 'package:concept/screens/signup_page.dart';
 import 'package:concept/screens/started_page.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../layouts/mobile_screen_layout.dart';
-import 'details.dart';
 import 'forgetpass.dart';
 
 class LoginPage extends StatefulWidget {
@@ -46,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
   //     t.cancel(); //stops the timer
   //   });
   // }
-  //
+
   // @override
   // void initState() {
   //   startTimer(); //start the timer on loading
@@ -130,53 +124,53 @@ class _LoginPageState extends State<LoginPage> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    // Fluttertoast.showToast(msg: "msg", toastLength: Toast.LENGTH_SHORT);
+    Fluttertoast.showToast(msg: "msg", toastLength: Toast.LENGTH_SHORT);
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  // Widget _buildGoogleButton() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     children: <Widget>[
-  //       Container(
-  //         height: 25,
-  //         width: 25,
-  //         child: GestureDetector(
-  //           onTap: () async {
-  //             await signInWithGoogle();
-  //             setState(() {
-  //               Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => MobileScreenLayout(),
-  //                 ),
-  //               );
-  //             });
-  //           },
-  //           child: Image.asset(
-  //             "assets/gbutton.png",
-  //             width: 25,
-  //             height: 25,
-  //           ),
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         width: 25,
-  //       ),
-  //       Container(
-  //         height: 25,
-  //         width: 25,
-  //         child: Image.asset(
-  //           "assets/fbutton.png",
-  //           width: 25,
-  //           height: 25,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _buildGoogleButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 25,
+          width: 25,
+          child: GestureDetector(
+            onTap: () async {
+              await signInWithGoogle();
+              setState(() {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MobileScreenLayout(),
+                  ),
+                );
+              });
+            },
+            child: Image.asset(
+              "assets/gbutton.png",
+              width: 25,
+              height: 25,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 25,
+        ),
+        Container(
+          height: 25,
+          width: 25,
+          child: Image.asset(
+            "assets/fbutton.png",
+            width: 25,
+            height: 25,
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget forgotPass() {
     return Row(
@@ -259,15 +253,6 @@ class _LoginPageState extends State<LoginPage> {
           child: MaterialButton(
             onPressed: () {
               signIn(emailController.text, passwordController.text);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => Details(
-              //       assetImage: 'assets/sliderstar.png',
-              //     ),
-              //   ),
-              // );
-              //  FocusScope.of(context).unfocus();
             },
             child: Container(
               child: _isLoading
@@ -408,15 +393,15 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Text(
-                          //   "or continue with",
-                          //   textAlign: TextAlign.center,
-                          //   style: GoogleFonts.roboto(
-                          //       fontSize: 14,
-                          //       fontWeight: FontWeight.w400,
-                          //       color: Color(0xFF1F1F1F)),
-                          // ),
-                          //_buildGoogleButton(),
+                          Text(
+                            "or continue with",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF1F1F1F)),
+                          ),
+                          _buildGoogleButton(),
                           register(),
                         ],
                       ),

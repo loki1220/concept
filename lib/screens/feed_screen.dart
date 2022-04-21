@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concept/screens/uploading_screens/audio_editor.dart';
 import 'package:concept/screens/uploading_screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:file_picker/file_picker.dart';
@@ -129,8 +130,14 @@ class _FeedScreenState extends State<FeedScreen> {
         child: MaterialButton(
           onPressed: () async {
             Navigator.of(context).pop();
-            final file = await FilePicker.platform.pickFiles();
+            final file = await FilePicker.platform.pickFiles(
+              type: FileType.audio,
+            );
             if (file == null) return;
+
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> AudioEditor(),),);
+
+
           },
           child: Text(
             "Audio",

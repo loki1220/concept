@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class CommentCard extends StatelessWidget {
@@ -29,11 +30,16 @@ class CommentCard extends StatelessWidget {
                       children: [
                         TextSpan(
                             text: snap.data()['name'],
-                            style: const TextStyle(
+                            style:  GoogleFonts.roboto(
                               fontWeight: FontWeight.bold,
+                              color: Color(0xFF000000),
                             )),
                         TextSpan(
-                          text: ' ${snap.data()['text']}',
+                          text: ' ${snap.data()['text']}',style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF393939),
+                        ),
+
                         ),
                       ],
                     ),

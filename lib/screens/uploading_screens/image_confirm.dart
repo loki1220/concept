@@ -33,6 +33,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
     super.initState();
   }
 
+   // bool isPhoto = true;
+
   String photoUrl = "",
       userName = "",
       description = "",
@@ -133,6 +135,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
 
     try {
       String docId = FirebaseFirestore.instance.collection('posts').doc().id;
+      print({'yourid ${docId} '});
 
       String profImage =
           await StorageMethods().uploadImageToStorage('posts', _file!, false);
@@ -545,10 +548,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                             if (imgFile != null) {
                               Uint8List imageRaw = await imgFile.readAsBytes();
                               setState(() {
-
+                                isPhoto = "true";
                                 _file = imageRaw;
                                 print('this path = $_file');
-                                isPhoto = "";
                               });
                             }
                             uploadImage().whenComplete(

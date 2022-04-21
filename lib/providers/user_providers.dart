@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import '../model/users.dart';
 import '../resources/auth_methods.dart';
 

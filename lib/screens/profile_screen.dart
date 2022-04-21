@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concept/screens/settings_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../widget/utils.dart';
-import 'login_page.dart';
+import '../widget/video_player_profile.dart';
 
 class Profile_Screen extends StatefulWidget {
   final String? uid;
@@ -15,18 +15,9 @@ class Profile_Screen extends StatefulWidget {
 }
 
 class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProviderStateMixin {
-  final _auth = FirebaseAuth.instance;
   late TabController tabController;
   var fabIcon = Icons.message;
 
-  void googleLogout() async {
-    await _auth.signOut();
-    await GoogleSignIn().signOut();
-    if (User != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (c) => LoginPage()));
-    }
-  }
 
   var userData = {};
   int postLen = 0;
@@ -127,7 +118,9 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               IconButton(
-                                onPressed: (){},
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> SettingsPage(),));
+                                },
                                 icon: Icon(Icons.settings, color: Color(0xFFFFFFFF),size: 25,),
                               ),
                             ],
@@ -257,7 +250,7 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
                   children: [
                     TextButton(
                       onPressed: (){},
-                      child: Text("Post", style: GoogleFonts.roboto(
+                      child: Text("Posts", style: GoogleFonts.roboto(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color(0xFF393939),
@@ -302,10 +295,23 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
             (snapshot.data! as dynamic).docs[index];
 
             return Container(
-              child: Image(
-                image: NetworkImage(snap['postUrl']),
+              child:  snap['isPhoto'] != null
+                  ? snap['isPhoto'] == true
+                  ? Image.network(
+                snap['postUrl'].toString(),
+                fit: BoxFit.cover,
+              )
+                  : VideoPlayerProfile(
+                videoUrl: snap['videoUrl'],
+              )
+                  : Image.network(
+                snap['postUrl'].toString(),
                 fit: BoxFit.cover,
               ),
+             /* Image(
+                image: NetworkImage(snap['postUrl']),
+                fit: BoxFit.cover,
+              ),*/
             );
           },
         );
@@ -318,25 +324,6 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
       ),
       ),
     );
-    // appBar: AppBar(
-    //   title: TextButton(
-    //     child: Text(
-    //       "Sign Out",
-    //       style: TextStyle(
-    //         color: Colors.white,
-    //       ),
-    //     ),
-    //     onPressed: () async {
-    //       await AuthMethods().signOut();
-    //       googleLogout();
-    //       Navigator.of(context).pushReplacement(
-    //         MaterialPageRoute(
-    //           builder: (context) => const LoginPage(),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // ),
   }
 
   Column buildStatColumn(int num, String label) {

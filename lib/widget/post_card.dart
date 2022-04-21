@@ -1,5 +1,5 @@
 import 'package:concept/widget/utils.dart';
-import 'package:concept/widget/video_player_item.dart';
+import 'package:concept/widget/video_player_feed.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +166,7 @@ class _PostCardState extends State<PostCard> {
                     height: MediaQuery.of(context).size.height * 0.45,
                     width: double.infinity,
                     child: widget.snap['isPhoto'] != null
-                        ? widget.snap['isPhoto'] == true
+                        ?  widget.snap['isPhoto'] == true
                         ? Image.network(
                       widget.snap['postUrl'].toString(),
                       fit: BoxFit.cover,
@@ -177,7 +177,8 @@ class _PostCardState extends State<PostCard> {
                         : Image.network(
                       widget.snap['postUrl'].toString(),
                       fit: BoxFit.cover,
-                    )),
+                    ),
+                ),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isLikeAnimating ? 1 : 0,
@@ -217,20 +218,30 @@ class _PostCardState extends State<PostCard> {
                   icon: widget.snap['likes'].contains(user.uid)
                       ? GradientIcon(
                           Icons.star,
-                          30,
+                          28,
                           LinearGradient(
                             colors: <Color>[
                               Color(0XFFFA0AFF),
                               Color(0XFF28B6ED),
                             ],
                           ),
-                        ) /*GIcon(
+                        )
+                        /*GIcon(
                           Icons.star_border,
                           color: Colors.pinkAccent,
                         )*/
-                      : const Icon(
-                          Icons.star_border,
-                        ),
+                      :  GradientIcon(
+                    Icons.star_border,
+                    28,
+                    LinearGradient(
+                      colors: <Color>[
+                        Color(0XFF00B7FF),
+                        Color(0XFFFA0AFF),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
                   onPressed: () => FireStoreMethods().likePost(
                     widget.snap['postId'].toString(),
                     FirebaseAuth.instance.currentUser!.uid.toString(),
@@ -242,6 +253,8 @@ class _PostCardState extends State<PostCard> {
               IconButton(
                 icon: const Icon(
                   Icons.comment_bank_rounded,
+                  size: 24,
+                  color: Color(0xFF525252),
                 ),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -254,14 +267,27 @@ class _PostCardState extends State<PostCard> {
               IconButton(
                   icon: const Icon(
                     Icons.ios_share,
+                    size: 22,
+                    color: Color(0xFF525252),
                   ),
                   onPressed: () {}),
               Expanded(
                   child: Align(
                 alignment: Alignment.bottomRight,
                 child: IconButton(
-                    icon: const Icon(Icons.bookmark_border), onPressed: () {}),
-              ))
+                    icon:   GradientIcon(
+                      Icons.edit_note_outlined,
+                      25,
+                      LinearGradient(
+                        colors: <Color>[
+                          Color(0XFF28B6ED),
+                          Color(0XFFFA0AFF),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ), onPressed: () {}),
+              ),)
             ],
           ),
           //DESCRIPTION AND NUMBER OF COMMENTS
