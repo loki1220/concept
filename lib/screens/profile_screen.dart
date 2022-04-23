@@ -267,7 +267,10 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
                   ],
                 ),
                 Divider(),
-            FutureBuilder(
+              SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height / 3.0,
+                child: FutureBuilder(
       future: FirebaseFirestore.instance
           .collection('posts')
           .where('uid', isEqualTo: uid)
@@ -275,7 +278,7 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(),
           );
         }
 
@@ -285,38 +288,40 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
           itemCount: (snapshot.data! as dynamic).docs.length,
           gridDelegate:
           const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 1.5,
-            childAspectRatio: 1,
+                crossAxisCount: 3,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 1.5,
+                childAspectRatio: 1,
           ),
           itemBuilder: (context, index) {
-            DocumentSnapshot snap =
-            (snapshot.data! as dynamic).docs[index];
+                DocumentSnapshot snap =
+                (snapshot.data! as dynamic).docs[index];
 
-            return Container(
-              child:  snap['isPhoto'] != null
-                  ? snap['isPhoto'] == true
-                  ? Image.network(
-                snap['postUrl'].toString(),
-                fit: BoxFit.cover,
-              )
-                  : VideoPlayerProfile(
-                videoUrl: snap['videoUrl'],
-              )
-                  : Image.network(
-                snap['postUrl'].toString(),
-                fit: BoxFit.cover,
-              ),
-             /* Image(
-                image: NetworkImage(snap['postUrl']),
-                fit: BoxFit.cover,
-              ),*/
-            );
+                return Container(
+                  child:  snap['isPhoto'] != null
+                      ? snap['isPhoto'] == true
+                      ? Image.network(
+                    snap['postUrl'].toString(),
+                    fit: BoxFit.cover,
+                  )
+                      : VideoPlayerProfile(
+                    videoUrl: snap['videoUrl'],
+                  )
+                      : Image.network(
+                    snap['postUrl'].toString(),
+                    fit: BoxFit.cover,
+                  ),
+                 /* Image(
+                    image: NetworkImage(snap['postUrl']),
+                    fit: BoxFit.cover,
+                  ),*/
+                );
           },
         );
       },
     ),
+              ),
+            ),
 
               ],
           ),

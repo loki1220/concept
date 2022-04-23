@@ -138,7 +138,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       print({'yourid ${docId} '});
 
       String profImage =
-          await StorageMethods().uploadImageToStorage('posts', _file!, false);
+          await StorageMethods().uploadImageToStorage('posts', _file!, true);
 
       Post post = Post(
         uid: user_id,

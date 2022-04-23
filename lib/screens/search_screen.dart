@@ -21,159 +21,165 @@ class _Search_screenState extends State<Search_screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Form(
-          child: CupertinoSearchTextField(
-            placeholderStyle: TextStyle(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Form(
+            child: CupertinoSearchTextField(
+              placeholderStyle: TextStyle(
 
-            ),
-            controller: searchController,
-            backgroundColor: Color(0xFF8C8C8C).withOpacity(0.3),
-            onSubmitted: (String _) {
-              setState(() {
-                isShowUsers = true;
-              });
-              print(_);
-            },
-            // decoration:
-                 // InputDecoration(labelText: 'Search for a user...'),
-            // onFieldSubmitted: (String _) {
-            //   setState(() {
-            //     isShowUsers = true;
-            //   });
-            //   print(_);
-            // },
-          ),
-        ),
-      ),
-
-      body: isShowUsers
-          ? FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .where(
-                    'username',
-                    isGreaterThanOrEqualTo: searchController.text,
-                  )
-                  .get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Profile_Screen(
-                            uid: (snapshot.data! as dynamic).docs[index]['uid'],
-                          ),
-                        ),
-                      ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            (snapshot.data! as dynamic).docs[index]['photoUrl'],
-                          ),
-                          radius: 16,
-                        ),
-                        title: Text(
-                          (snapshot.data! as dynamic).docs[index]['username'],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            )
-          : Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("Suggested",
-                        style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Color(0xFF393939),
-                      ),
-                      ),
-                    ],
-                ),
               ),
-                FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('posts')
-                      .orderBy('datePublished')
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return StaggeredGridView.countBuilder(
-                      shrinkWrap: true,
-                      crossAxisCount: 3,
-                      itemCount: (snapshot.data! as dynamic).docs.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot snap =
-                        (snapshot.data! as dynamic).docs[index];
-
-                        return Container(
-                          child:  snap['isPhoto'] != null
-                              ? snap['isPhoto'] == true
-                              ? Image.network(
-                            snap['postUrl'].toString(),
-                            fit: BoxFit.cover,
-                          )
-                              : VideoPlayerProfile(
-                            videoUrl: snap['videoUrl'],
-                          )
-                              : Image.network(
-                            snap['postUrl'].toString(),
-                            fit: BoxFit.cover,
-                          ),
-                          /* Image(
-                    image: NetworkImage(snap['postUrl']),
-                    fit: BoxFit.cover,
-                  ),*/
-                        );
-                      },
-                          /*Image.network(
-                        (snapshot.data! as dynamic).docs[index]['postUrl'],
-                        fit: BoxFit.cover,
-                      ),*/
-                      staggeredTileBuilder: (index) => MediaQuery.of(context)
-                                  .size
-                                  .width >
-                              webScreenSize
-                          ? StaggeredTile.count(
-                              (index % 7 == 0) ? 1 : 1, (index % 7 == 0) ? 1 : 1)
-                          : StaggeredTile.count(
-                              (index % 7 == 0) ? 2 : 1, (index % 7 == 0) ? 2 : 1),
-                      mainAxisSpacing: 8.0,
-                      crossAxisSpacing: 8.0,
-                    );
-                  },
-                ),
-              ],
+              controller: searchController,
+              backgroundColor: Color(0xFF8C8C8C).withOpacity(0.3),
+              onSubmitted: (String _) {
+                setState(() {
+                  isShowUsers = true;
+                });
+                print(_);
+              },
+            ),
           ),
-      /*Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: CupertinoSearchTextField(),
         ),
-      ),*/
+
+        body: isShowUsers
+            ? SingleChildScrollView(
+              child: Container(
+               height: MediaQuery.of(context).size.height / 1.4,
+                child: FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .where(
+                          'username',
+                          isGreaterThanOrEqualTo: searchController.text,
+                        )
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: (snapshot.data! as dynamic).docs.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Profile_Screen(
+                                  uid: (snapshot.data! as dynamic).docs[index]['uid'],
+                                ),
+                              ),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  (snapshot.data! as dynamic).docs[index]['photoUrl'],
+                                ),
+                                radius: 16,
+                              ),
+                              title: Text(
+                                (snapshot.data! as dynamic).docs[index]['username'],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+              ),
+            )
+            : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Suggested",
+                          style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Color(0xFF393939),
+                        ),
+                        ),
+                      ],
+                  ),
+                ),
+                  SingleChildScrollView(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 1.4,
+                      child: FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection('posts')
+                            .orderBy('datePublished')
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          return StaggeredGridView.countBuilder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            crossAxisCount: 3,
+                            itemCount: (snapshot.data! as dynamic).docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot snap =
+                              (snapshot.data! as dynamic).docs[index];
+
+                              return Container(
+                                child:  snap['isPhoto'] != null
+                                    ? snap['isPhoto'] == true
+                                    ? Image.network(
+                                  snap['postUrl'].toString(),
+                                  fit: BoxFit.cover,
+                                )
+                                    : VideoPlayerProfile(
+                                  videoUrl: snap['videoUrl'],
+                                )
+                                    : Image.network(
+                                  snap['postUrl'].toString(),
+                                  fit: BoxFit.cover,
+                                ),
+                                /* Image(
+                          image: NetworkImage(snap['postUrl']),
+                          fit: BoxFit.cover,
+                        ),*/
+                              );
+                            },
+                                /*Image.network(
+                              (snapshot.data! as dynamic).docs[index]['postUrl'],
+                              fit: BoxFit.cover,
+                            ),*/
+                            staggeredTileBuilder: (index) => MediaQuery.of(context)
+                                        .size
+                                        .width >
+                                    webScreenSize
+                                ? StaggeredTile.count(
+                                    (index % 7 == 0) ? 1 : 1, (index % 7 == 0) ? 1 : 1)
+                                : StaggeredTile.count(
+                                    (index % 7 == 0) ? 2 : 1, (index % 7 == 0) ? 2 : 1),
+                            mainAxisSpacing: 8.0,
+                            crossAxisSpacing: 8.0,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+            ),
+        /*Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: CupertinoSearchTextField(),
+          ),
+        ),*/
+      ),
     );
   }
 }

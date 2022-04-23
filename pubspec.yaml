@@ -61,6 +61,7 @@ dependencies:
   audioplayers: ^0.20.1
   audioplayer: ^0.8.1
   video_compress: ^3.1.0
+  tiktoklikescroller: ^0.2.0
 
 
 
