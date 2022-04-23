@@ -90,8 +90,8 @@ class _AudioEditorState extends State<AudioEditor> {
             padding: const EdgeInsets.symmetric( vertical: 28),
             child: Container(
               height: 250,
-              // width: MediaQuery.of(context).size.width / 1.5,
-              // color: Colors.black,
+              width: MediaQuery.of(context).size.width / 1.5,
+              color: Colors.black,
               child: Text(
                 "Add Cover Pic",
                 style: GoogleFonts.roboto(
