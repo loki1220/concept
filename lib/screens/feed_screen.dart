@@ -331,6 +331,7 @@ class _FeedScreenState extends State<FeedScreen> {
           centerTitle: false,
           actions: [
             IconButton(
+              .....
               onPressed: () {
                 showCustomDialog(context);
               },
