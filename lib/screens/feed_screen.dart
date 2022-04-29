@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concept/screens/uploading_screens/audio_editor.dart';
 import 'package:concept/screens/uploading_screens/gallery.dart';
@@ -24,7 +26,51 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
+
   final picker = ImagePicker();
+
+   PlatformFile? mp3;
+  File? audioFile;
+
+
+  // @override
+  // void dispose(){
+  //   audioPlayer.dispose();
+  //
+  //   super.dispose();
+  // }
+
+
+  // void openFile (PlatformFile file) {
+  //   OpenFile.open(file.path!);
+  // }
+
+  Future setAudio() async{
+    //Repeat song when completed
+    audioPlayer.setReleaseMode(ReleaseMode.LOOP);
+
+    //Load audio from file
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result != null){
+      final audioFile = File(result.files.single.path!);
+      audioPlayer.setUrl(audioFile.path, isLocal: true);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context)=>
+              AudioEditor(
+                audioFile: File(audioFile.path),
+              ),
+        ),
+      );
+    }
+  }
 
   Widget _slideButton() {
     return Material(
@@ -128,14 +174,35 @@ class _FeedScreenState extends State<FeedScreen> {
           // ),
         ),
         child: MaterialButton(
-          onPressed: () async {
+          onPressed: () /*async*/ {
             Navigator.of(context).pop();
-            final file = await FilePicker.platform.pickFiles(
-              type: FileType.audio,
-            );
-            if (file == null) return;
+            setAudio();
+            // final audio = await FilePicker.platform.pickFiles(
+            //   type: FileType.custom,
+            //
+            //   onFileLoading: (FilePickerStatus status) => print(status),
+            //   allowedExtensions: ['mp3'],
+            //   allowMultiple: true,
+            // );
+            // if (audio != null) {
+            //   final file = File(result.files.s)
+            //   print('hi');
+            //   mp3 = audio.files.first;
+            //   print('this path = $mp3');
+            //
+            //   // setState(() {
+            //   //   audioFile = mp3 ;
+            //   // });
+            //   // openFile(file);
+            //   // Navigator.push(
+            //   //   context,
+            //   //   MaterialPageRoute(
+            //   //     builder: (context)=> AudioEditor(audioFile:  File(audioFile!.path),
+            //   //     ),
+            //   //   ),
+            //   // );
+            // }
 
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> AudioEditor(),),);
 
 
           },
@@ -240,6 +307,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // PlatformFile mp3;
+    // final File fileForFirebase = File(mp3.path);
     final width = MediaQuery.of(context).size.width;
 
     return SafeArea(

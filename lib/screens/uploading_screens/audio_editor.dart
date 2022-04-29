@@ -1,16 +1,33 @@
+import 'dart:io';
 import 'package:concept/screens/uploading_screens/audio_confirm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class AudioEditor extends StatefulWidget {
-  const AudioEditor({Key? key}) : super(key: key);
+  final File audioFile;
+  const AudioEditor({Key? key, required this.audioFile}) : super(key: key);
 
   @override
   State<AudioEditor> createState() => _AudioEditorState();
 }
 
 class _AudioEditorState extends State<AudioEditor> {
+
+  final audioPlayer = AudioPlayer();
+
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
+  // @override
+  // void dispose(){
+  //   audioPlayer.dispose();
+  //
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,18 +105,38 @@ class _AudioEditorState extends State<AudioEditor> {
         ),
           Padding(
             padding: const EdgeInsets.symmetric( vertical: 28),
-            child: Container(
-              height: 250,
-              width: MediaQuery.of(context).size.width / 1.5,
-              color: Colors.black,
-              child: Text(
-                "Add Cover Pic",
-                style: GoogleFonts.roboto(
-                  color: Color(0xFF000000),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
+            child: Column(
+              children: [
+                Text(
+                  "Add Cover Pic",
+                  style: GoogleFonts.roboto(
+                    color: Color(0xFF000000),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset("assets/sampleimg.png",
+                  width: 150,
+                    height: 150,
+                    fit: BoxFit.cover ,
+                  ),
+                ),
+                Slider(
+                  min: 0,
+                  max: duration.inSeconds.toDouble(),
+                  value: position.inSeconds.toDouble(),
+                  onChanged: (value) async {},
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Text(formatTime(position)),
+                    // Text(formatTime(duration))
+                  ],
+                )
+              ],
             ),
           )
         ],
