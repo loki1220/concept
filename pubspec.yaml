@@ -41,7 +41,7 @@ dependencies:
   path_provider: ^2.0.9
   path: ^1.8.0
   simple_gradient_text: ^1.2.2
-  photo_manager: ^2.0.1
+  photo_manager: ^2.0.0
   cached_network_image: ^3.2.0
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
@@ -50,7 +50,7 @@ dependencies:
   google_sign_in: ^5.2.4
   getwidget: ^2.0.5
   get: ^4.6.1
-  firebase_storage: ^10.2.3
+  firebase_storage: ^10.2.14
   provider: ^6.0.2
   uuid: ^3.0.5
   intl: ^0.17.0
@@ -59,11 +59,10 @@ dependencies:
   just_audio: ^0.9.20
   file_picker: ^4.3.3
   audioplayers: ^0.20.1
-  #audioplayer: ^0.8.1
   video_compress: ^3.1.0
   tiktoklikescroller: ^0.2.0
   open_file: ^3.2.1
-  #audio_picker: ^1.0.0
+  assets_audio_player: ^3.0.4+1
 
 
 

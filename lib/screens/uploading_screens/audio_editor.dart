@@ -6,8 +6,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class AudioEditor extends StatefulWidget {
+
+  const AudioEditor({Key? key, required this.audioFile, this.audioPath}) : super(key: key);
+
   final File audioFile;
-  const AudioEditor({Key? key, required this.audioFile}) : super(key: key);
+  final String? audioPath;
+
 
   @override
   State<AudioEditor> createState() => _AudioEditorState();
@@ -17,16 +21,36 @@ class _AudioEditorState extends State<AudioEditor> {
 
   final audioPlayer = AudioPlayer();
 
+  String? audioPath;
+
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
 
-  // @override
-  // void dispose(){
-  //   audioPlayer.dispose();
-  //
-  //   super.dispose();
-  // }
+  @override
+  void iniState() {
+    super.initState();
+    _initAudio();
+
+    // audioPlayer.onPlayerStateChanged.
+  }
+
+  _initAudio() async {
+    final audio = await widget.audioFile;
+    // audioPlayer.onPlayerStateChanged.,
+    setState(() {
+      audioPath = widget.audioPath;
+    });
+  }
+
+
+
+
+  @override
+  void dispose(){
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,10 +157,25 @@ class _AudioEditorState extends State<AudioEditor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Text(formatTime(position)),
-                    // Text(formatTime(duration))
+                    // Text(formatTime(duration - position))
                   ],
-                )
+                ),
               ],
+            ),
+          ),
+          CircleAvatar(
+            radius: 35,
+            child: IconButton(
+              icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
+              ),
+            iconSize: 50,
+              onPressed: () async {
+              //   if(isPlaying) {
+              //     await audioPlayer.pause();
+              //   } else {
+              //     await audioPlayer.play()
+              //   }
+              },
             ),
           )
         ],
