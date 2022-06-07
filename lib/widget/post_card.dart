@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:concept/model/users.dart' as model;
+import 'package:video_player/video_player.dart';
 import '../providers/user_providers.dart';
 import '../resources/firestore_methods.dart';
 import '../screens/comments_screen.dart';
@@ -25,9 +26,15 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  List<WordPair> pics = generateWordPairs().take(5).toList();
+
+
+  VideoPlayerController? _controller;
+
   int commentLen = 0;
   bool isLikeAnimating = false;
   bool isPhoto = true;
+
 
   deletePost(String postId) async {
     try {
@@ -40,19 +47,23 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  Future<void> _pullRefresh() async {
+    List<model.User> freshPosts = await WordDataSource().getFutureWords(delay: 2);
+    setState(() {
+      pics = freshPosts;
+    });
+    // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
     // final width = MediaQuery.of(context).size.width;
 
-    return Container(
-      // boundary needed for web
-      // decoration: BoxDecoration(
-      //   color: Colors.black,
-      // ),
-      // padding: const EdgeInsets.symmetric(
-      //   vertical: 10,
-      // ),
+    return RefreshIndicator(
+      onRefresh: _pullRefresh,
       child: Column(
         children: [
           // HEADER SECTION OF THE POST
@@ -172,8 +183,8 @@ class _PostCardState extends State<PostCard> {
                       fit: BoxFit.cover,
                     )
                         : VideoPlayerItem(
-                      videoUrl: widget.snap['videoUrl'],
-                    )
+                         videoUrl: widget.snap['videoUrl'],
+                      )
                         : Image.network(
                       widget.snap['postUrl'].toString(),
                       fit: BoxFit.cover,
@@ -369,3 +380,8 @@ class _PostCardState extends State<PostCard> {
     );
   }
 }
+
+
+
+
+

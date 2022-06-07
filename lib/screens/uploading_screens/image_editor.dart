@@ -2,31 +2,61 @@ import 'dart:io';
 import 'package:concept/screens/uploading_screens/gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
 import 'image_confirm.dart';
 
-class Image_Editor extends StatefulWidget {
-  const Image_Editor({Key? key, required this.imageFile}) : super(key: key);
+class ImageEditor extends StatefulWidget {
+  const ImageEditor({Key? key, required this.imageFile}) : super(key: key);
 
-  final Future<File?> imageFile;
+   final Future<File?> imageFile;
+
+
 
   @override
-  State<Image_Editor> createState() => _Image_EditorState();
+  State<ImageEditor> createState() => _ImageEditorState();
 }
 
-class _Image_EditorState extends State<Image_Editor> {
-  static List<AssetEntity> assets = [];
+class _ImageEditorState extends State<ImageEditor> {
+  // static List<AssetEntity> assets = [];
   int im = 0;
+  final picker = ImagePicker();
+  List<File> imageFiles = [];
+
+  var imagePath;
+
+  var image;
+
+
+  // String? imagePath;
+  // Uint8List? imgFile;
+  // late File imgFile;
+
+  // Uint8List? _file;
+
+
   // final Future<File?> imageFile;
+
+
+  // @override
+  // void initState() {
+  //   // _fetch();
+  //   // Uint8List img =  imgFile.readAsBytes();
+  //   // setState(() {
+  //   //   imagePath = widget.imagePath;
+  //   //   img = ;
+  //   // });
+  //   // super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         body: Column(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: kToolbarHeight - 18,
         ),
         Row(
@@ -37,7 +67,7 @@ class _Image_EditorState extends State<Image_Editor> {
                 IconButton(
                   onPressed: () {
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (builder) => Gallery()));
+                        MaterialPageRoute(builder: (builder) => const Gallery()));
                   },
                   icon: Icon(
                     Icons.arrow_back_ios,
@@ -73,8 +103,9 @@ class _Image_EditorState extends State<Image_Editor> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Image_Confirm_Screen(
+                        builder: (context) => ImageConfirmScreen(
                           imageFile: widget.imageFile,
+                          image: image, croppedImg: true,
                         ),
                       ),
                     );
@@ -100,16 +131,20 @@ class _Image_EditorState extends State<Image_Editor> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Container(
+          child:
+          Container(
             height: 350,
             // color: Colors.black,
             alignment: Alignment.center,
-            child: FutureBuilder<File?>(
-              future: widget.imageFile, //assets[im].file,
-              builder: (_, snapshot) {
-                final file = snapshot.data;
-                if (file == null) return Container();
-                return Image.file(file);
+            child: image!=null
+                ?Image.file(image)
+                :FutureBuilder<File?>(
+                  future: widget.imageFile, //assets[im].file,
+                  builder: (_, snapshot) {
+                  final file = snapshot.data;
+                  imagePath=snapshot.data;
+                   if (file == null) return Container();
+                   return Image.file(file);
               },
             ),
           ),
@@ -129,7 +164,9 @@ class _Image_EditorState extends State<Image_Editor> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                cropImage();
+              },
               icon: Icon(
                 Icons.crop_rotate,
                 size: 24,
@@ -162,47 +199,75 @@ class _Image_EditorState extends State<Image_Editor> {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            TextButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 25,
-                ),
-              ),
-              child: Text(
-                "Cancel",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.roboto(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF393939)),
-              ),
-            ),
-            // SizedBox(
-            //   width: 30,
-            // ),
-            TextButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 25,
-                ),
-              ),
-              child: Text(
-                "Done",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.roboto(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFFFA0AFF)),
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: <Widget>[
+        //     TextButton(
+        //       onPressed: () {},
+        //       style: ElevatedButton.styleFrom(
+        //         padding: EdgeInsets.symmetric(
+        //           horizontal: 25,
+        //         ),
+        //       ),
+        //       child: Text(
+        //         "Cancel",
+        //         textAlign: TextAlign.center,
+        //         style: GoogleFonts.roboto(
+        //             fontSize: 20,
+        //             fontWeight: FontWeight.w500,
+        //             color: Color(0xFF393939)),
+        //       ),
+        //     ),
+        //     TextButton(
+        //       onPressed: () {},
+        //       style: ElevatedButton.styleFrom(
+        //         padding: EdgeInsets.symmetric(
+        //           horizontal: 25,
+        //         ),
+        //       ),
+        //       child: Text(
+        //         "Done",
+        //         textAlign: TextAlign.center,
+        //         style: GoogleFonts.roboto(
+        //             fontSize: 20,
+        //             fontWeight: FontWeight.w500,
+        //             color: Color(0xFFFA0AFF)),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
-    ));
+    ),
+    );
   }
+
+cropImage()async{
+  File? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imagePath.path,
+      aspectRatioPresets: Platform.isAndroid
+          ? [
+         CropAspectRatioPreset.square,
+      ]
+          : [
+        CropAspectRatioPreset.square,
+      ],
+      androidUiSettings: const AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.black,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
+      iosUiSettings: const IOSUiSettings(
+        title: 'Cropper',
+      ));
+  if (croppedFile != null) {
+    setState(() {
+      image = croppedFile;
+      //_imageList.add(croppedFile);
+
+
+      // uploadPic(imageFile!);
+    });
+  }
+}
 }

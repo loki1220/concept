@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,24 +7,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
 import '../../layouts/mobile_screen_layout.dart';
 import '../../model/post.dart';
 import '../../resources/storage_methods.dart';
 import '../../widget/utils.dart';
 
-class Image_Confirm_Screen extends StatefulWidget {
-  const Image_Confirm_Screen({Key? key, required this.imageFile})
+class ImageConfirmScreen extends StatefulWidget {
+  const ImageConfirmScreen({Key? key, required this.imageFile, required this.image, required this.croppedImg})
       : super(key: key);
 
   final Future<File?> imageFile;
+  final File image;
+  final bool croppedImg;
 
   @override
-  State<Image_Confirm_Screen> createState() => _Image_Confirm_ScreenState();
+  State<ImageConfirmScreen> createState() => _ImageConfirmScreenState();
 }
 
-class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
+class _ImageConfirmScreenState extends State<ImageConfirmScreen> {
   int im = 0;
+
 
   @override
   void initState() {
@@ -33,7 +34,6 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
     super.initState();
   }
 
-   // bool isPhoto = true;
 
   String photoUrl = "",
       userName = "",
@@ -47,6 +47,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       isPhoto = "";
 
   late File imgFile;
+
 
   Uint8List? _file;
 
@@ -75,35 +76,35 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
   //     );
 
   Widget buildToggleSwitch1() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value1,
-          onChanged: (value) => setState(() => this.value1 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value1,
+      onChanged: (value) => setState(() => this.value1 = value),
+    ),
+  );
   Widget buildToggleSwitch2() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value2,
-          onChanged: (value) => setState(() => this.value2 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value2,
+      onChanged: (value) => setState(() => this.value2 = value),
+    ),
+  );
   Widget buildToggleSwitch3() => Transform.scale(
-        scale: 0.7,
-        child: CupertinoSwitch(
-          thumbColor: Color(0xFFFFFFFF),
-          trackColor: Color(0xFFFA0AFF),
-          activeColor: Color(0xFF28B6ED),
-          value: value3,
-          onChanged: (value) => setState(() => this.value3 = value),
-        ),
-      );
+    scale: 0.7,
+    child: CupertinoSwitch(
+      thumbColor: Color(0xFFFFFFFF),
+      trackColor: Color(0xFFFA0AFF),
+      activeColor: Color(0xFF28B6ED),
+      value: value3,
+      onChanged: (value) => setState(() => this.value3 = value),
+    ),
+  );
 
   _fetch() async {
     final firebaseUser = await FirebaseAuth.instance.currentUser;
@@ -138,7 +139,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
       print({'yourid ${docId} '});
 
       String profImage =
-          await StorageMethods().uploadImageToStorage('posts', _file!, true);
+      await StorageMethods().uploadImageToStorage('posts', _file!, true);
 
       Post post = Post(
         uid: user_id,
@@ -328,6 +329,22 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           maxLines: 5,
                         ),
                       ),
+                          // widget.croppedImg
+                         // ? Container(
+                         //   height: 120.0,
+                         //   width: 80.0,
+                         //   child: AspectRatio(
+                         //   aspectRatio: 487 / 451,
+                         //   child: Container(
+                         //   height: 350,
+                         //   decoration: BoxDecoration(
+                         //   borderRadius: BorderRadius.circular(8.0)),
+                         //   alignment: Alignment.center,
+                         //   child:/* widget.image != null*/
+                         //      Image.file(widget.image),
+                         //   ),
+                         //   ),
+                         //  )
                       Container(
                         height: 120.0,
                         width: 80.0,
@@ -336,10 +353,12 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                           child: Container(
                             height: 350,
                             decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0)),
+                                borderRadius: BorderRadius.circular(8.0)),
                             alignment: Alignment.center,
-                            child: FutureBuilder<File?>(
-                              future: widget.imageFile, //assets[im].file,
+                            child:widget.image!=null
+                                ?Image.file(widget.image)
+                                :FutureBuilder<File?>(
+                                 future: widget.imageFile, //assets[im].file,
                               builder: (_, snapshot) {
                                 final file = snapshot.data;
                                 imgFile = file!;
@@ -348,6 +367,8 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               },
                             ),
                           ),
+
+
                           // Container(
                           //   decoration: BoxDecoration(
                           //     borderRadius: BorderRadius.circular(8.0),
@@ -378,9 +399,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                   //     ],
                   //   ),
                   // ),
-                  Divider(),
+                  const Divider(),
                   Container(
-                    color: Color(0xFFC4C4C4).withOpacity(0.2),
+                    color: const Color(0xFFC4C4C4).withOpacity(0.2),
                     child: Column(
                       children: [
                         Padding(
@@ -391,9 +412,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               RichText(
                                 text: TextSpan(
                                   children: [
-                                    WidgetSpan(
+                                    const WidgetSpan(
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                             horizontal: 10.0),
                                         child: Icon(
                                           Icons.location_on,
@@ -422,7 +443,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                             ],
                           ),
                         ),
-                        Divider(),
+                        const Divider(),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
@@ -431,9 +452,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               RichText(
                                 text: TextSpan(
                                   children: [
-                                    WidgetSpan(
+                                     const WidgetSpan(
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                             horizontal: 10.0),
                                         child: Icon(
                                           Icons.ios_share,
@@ -466,9 +487,9 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                               RichText(
                                 text: TextSpan(
                                   children: [
-                                    WidgetSpan(
+                                    const WidgetSpan(
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                             horizontal: 10),
                                         child: Icon(
                                           Icons.insert_comment,
@@ -492,7 +513,7 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                             ],
                           ),
                         ),
-                        Divider(),
+                        const Divider(),
                       ],
                     ),
                   ),
@@ -503,11 +524,13 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                       Container(
                         height: 42,
                         width: 5 * (MediaQuery.of(context).size.width / 17),
-                        decoration: ShapeDecoration(
+                        decoration: const ShapeDecoration(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.horizontal(
                                   left: Radius.elliptical(15, 15),
-                                  right: Radius.elliptical(15, 15))),
+                                  right: Radius.elliptical(15, 15),
+                              ),
+                          ),
                           color: Color(0xFFE063FF),
                         ),
                         child: ElevatedButton(
@@ -545,18 +568,25 @@ class _Image_Confirm_ScreenState extends State<Image_Confirm_Screen> {
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (imgFile != null) {
-                              Uint8List imageRaw = await imgFile.readAsBytes();
-                              setState(() {
-                                isPhoto = "true";
-                                _file = imageRaw;
-                                print('this path = $_file');
-                              });
-                            }
+                            setState(() {
+                              imgFile = widget.image;
+                            });
+                            Uint8List imageRaw = await imgFile.readAsBytes();
+                            setState(() {
+                              isPhoto = "true";
+                              _file = imageRaw;
+                              print('this path = $_file');
+                            });
+                            Uint8List imgRaw = await imgFile.readAsBytes();
+                            setState(() {
+                              isPhoto = "true";
+                              _file = imgRaw;
+                              print('this path = $_file');
+                            });
                             uploadImage().whenComplete(
-                              () => Navigator.of(context).pushReplacement(
+                                  () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) => MobileScreenLayout(),
+                                  builder: (context) => const MobileScreenLayout(),
                                 ),
                               ),
                             );

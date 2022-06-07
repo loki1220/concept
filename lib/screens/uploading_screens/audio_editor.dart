@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:concept/screens/uploading_screens/audio_confirm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class AudioEditor extends StatefulWidget {
@@ -37,7 +37,7 @@ class _AudioEditorState extends State<AudioEditor> {
 
   _initAudio() async {
     final audio = await widget.audioFile;
-    // audioPlayer.onPlayerStateChanged.,
+    audioPlayer.onPlayerStateChanged;
     setState(() {
       audioPath = widget.audioPath;
     });
@@ -48,7 +48,7 @@ class _AudioEditorState extends State<AudioEditor> {
 
   @override
   void dispose(){
-    audioPlayer.dispose();
+    // audioPlayer.dispose();
     super.dispose();
   }
 

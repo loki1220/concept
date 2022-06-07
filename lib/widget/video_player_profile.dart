@@ -21,6 +21,7 @@ class _VideoPlayerProfileState extends State<VideoPlayerProfile> {
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)..setLooping(true)
       ..initialize().then((value) {
         videoPlayerController.pause();
+        // videoPlayerController.play();
         videoPlayerController.setVolume(0);
       });
   }

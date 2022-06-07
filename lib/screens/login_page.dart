@@ -383,7 +383,6 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.grey,
                             ),
                           ),
-                          forgotPass(),
                         ],
                       ),
                     ),
@@ -393,6 +392,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          forgotPass(),
                           Text(
                             "or continue with",
                             textAlign: TextAlign.center,

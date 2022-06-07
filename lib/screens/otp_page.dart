@@ -11,7 +11,7 @@ class Otp_Page extends StatefulWidget {
 }
 
 class _Otp_PageState extends State<Otp_Page> {
-  // List<int> firstRow = [1, 2, 3], seondRow = [4, 5, 6], thirdRow = [7, 8, 9];
+  // List<int> firstRow = [1, 2, 3], secondRow = [4, 5, 6], thirdRow = [7, 8, 9];
 
   int pinLength = 6;
 
@@ -19,7 +19,7 @@ class _Otp_PageState extends State<Otp_Page> {
 
   String workingPin = "";
 
-  Widget _sendagain() {
+  Widget _sendAgain() {
     return RichText(
       text: TextSpan(
         text: "Send again",
@@ -224,7 +224,7 @@ class _Otp_PageState extends State<Otp_Page> {
 
   @override
   Widget build(BuildContext context) {
-    //verifybutton
+    //verifyButton
     final verifyButton = Material(
       borderRadius: BorderRadius.circular(18),
       child: Container(
@@ -304,7 +304,7 @@ class _Otp_PageState extends State<Otp_Page> {
                       SizedBox(
                         height: 10,
                       ),
-                      _sendagain(),
+                      _sendAgain(),
                     ],
                   ),
                   verifyButton,

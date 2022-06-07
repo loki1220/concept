@@ -6,6 +6,8 @@ import 'package:concept/screens/uploading_screens/gallery.dart';
 import 'package:concept/widget/gradient_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -26,6 +28,8 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+
+  
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
@@ -35,15 +39,15 @@ class _FeedScreenState extends State<FeedScreen> {
   final picker = ImagePicker();
 
    PlatformFile? mp3;
-  File? audioFile;
+   File? audioFile;
 
 
-  // @override
-  // void dispose(){
-  //   audioPlayer.dispose();
-  //
-  //   super.dispose();
-  // }
+  @override
+  void dispose(){
+    audioPlayer.dispose();
+
+    super.dispose();
+  }
 
 
   // void openFile (PlatformFile file) {
@@ -305,6 +309,11 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
+
+  Future<void>_loadResources(bool reload) async{
+    await Get.find<ProductController>().getReco
+  }
+
   @override
   Widget build(BuildContext context) {
     // PlatformFile mp3;
@@ -348,28 +357,33 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
           ],
         ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-          builder: (context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (ctx, index) => Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: width > webScreenSize ? width * 0.3 : 0,
-                  vertical: width > webScreenSize ? 15 : 0,
-                ),
-                child: PostCard(
-                  snap: snapshot.data!.docs[index].data(),
-                ),
-              ),
-            );
+        body: RefreshIndicator(
+          onRefresh: () async{
+           await _loadResources(true);
           },
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('posts').orderBy("datePublished", descending: true).snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (ctx, index) => Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: width > webScreenSize ? width * 0.3 : 0,
+                    vertical: width > webScreenSize ? 15 : 0,
+                  ),
+                  child: PostCard(
+                    snap: snapshot.data!.docs[index].data(),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

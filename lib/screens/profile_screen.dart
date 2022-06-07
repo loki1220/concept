@@ -119,9 +119,13 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
                             children: [
                               IconButton(
                                 onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> SettingsPage(),));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const SettingsPage(),));
                                 },
-                                icon: Icon(Icons.settings, color: Color(0xFFFFFFFF),size: 25,),
+                                icon: const Icon(
+                                  Icons.settings,
+                                  color: Color(0xFFFFFFFF),
+                                  size: 25,
+                                ),
                               ),
                             ],
                           ),

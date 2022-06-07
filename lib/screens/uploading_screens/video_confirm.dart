@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
@@ -88,9 +87,9 @@ class Video_Confirm_ScreenState extends State<Video_Confirm_Screen> {
   Widget buildToggleSwitch1() => Transform.scale(
     scale: 0.7,
     child: CupertinoSwitch(
-      thumbColor: Color(0xFFFFFFFF),
-      trackColor: Color(0xFFFA0AFF),
-      activeColor: Color(0xFF28B6ED),
+      thumbColor: const Color(0xFFFFFFFF),
+      trackColor: const Color(0xFFFA0AFF),
+      activeColor: const Color(0xFF28B6ED),
       value: value1,
       onChanged: (value) => setState(() => this.value1 = value),
     ),

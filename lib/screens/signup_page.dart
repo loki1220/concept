@@ -1,11 +1,12 @@
 import 'dart:typed_data';
-
+import 'dart:io';
 import 'package:concept/resources/auth_methods.dart';
 import 'package:concept/widget/circular_indicator.dart';
 import 'package:concept/widget/mytextfield.dart';
 import 'package:concept/widget/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widget/gradient_icon.dart';
 import 'login_page.dart';
@@ -35,6 +36,14 @@ class _SignupPageState extends State<SignupPage> {
   Uint8List? _image;
 
   final picker = ImagePicker();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -136,8 +145,6 @@ class _SignupPageState extends State<SignupPage> {
                       TextButton(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          // final pickedFile = await picker.pickImage(
-                          //     source: ImageSource.camera);
                           selectImageCamera();
                         },
                         child: Text(
@@ -156,8 +163,6 @@ class _SignupPageState extends State<SignupPage> {
                       TextButton(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          // final pickedFile = await picker.pickImage(
-                          //     source: ImageSource.gallery);
                           selectImageGallery();
                         },
                         child: Text(
@@ -200,19 +205,80 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   selectImageGallery() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+    final pickedFile =
+    await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      File? croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: const AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.black,
+          toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: Colors.teal,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        iosUiSettings: const IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ),
+      );
+      if (croppedFile != null) {
+        Uint8List imageRaw = await croppedFile.readAsBytes();
+        setState(() {
+          _image = imageRaw;
+          print('this is file path = $_image');
+        });
+      }
+    }
+
+    // Uint8List im = await pickImage(ImageSource.gallery);
+    // // set state because we need to display the image we selected on the circle avatar
+    // setState(() {
+    //   _image = im;
+    // });
   }
 
   selectImageCamera() async {
-    Uint8List im = await pickImage(ImageSource.camera);
+    final pickedFile =
+    await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      File? croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.black,
+          toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: Colors.teal,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ),
+      );
+      if (croppedFile != null) {
+        Uint8List imageRaw = await croppedFile.readAsBytes();
+        setState(() {
+          _image = imageRaw;
+        });
+      }
+    }
     // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+    // setState(() {
+    //   _image = im;
+    // });
   }
 
   @override
@@ -275,6 +341,28 @@ class _SignupPageState extends State<SignupPage> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color(0xFFE9A7F4).withOpacity(0.9),
+          leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: Color(0xFF000000),
+            ),
+          ),
+          centerTitle: true,
+          title: Text(
+            "Register",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.roboto(
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF000000)),
+          ),
+        ),
         //resizeToAvoidBottomInset: false,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -300,14 +388,6 @@ class _SignupPageState extends State<SignupPage> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text(
-                              "Register",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF000000)),
-                            ),
                             SizedBox(
                               height: 15,
                             ),
@@ -335,13 +415,13 @@ class _SignupPageState extends State<SignupPage> {
                                                 showCustomDialog(context);
                                               },
                                               icon: Padding(
-                                                padding: EdgeInsets.symmetric(
+                                                padding: const EdgeInsets.symmetric(
                                                     horizontal: 80,
                                                     vertical: 80),
                                                 child: GradientIcon(
                                                   Icons.camera_alt_outlined,
                                                   40.0,
-                                                  LinearGradient(
+                                                  const LinearGradient(
                                                     colors: <Color>[
                                                       Color(0xFFFA0AFF),
                                                       Color(0xFF28B6ED),
@@ -357,13 +437,13 @@ class _SignupPageState extends State<SignupPage> {
                                               shape: BoxShape.circle,
                                               color: Colors.white,
                                               image: DecorationImage(
-                                                fit: BoxFit.fill,
+                                                // fit: BoxFit.fill,
                                                 image: MemoryImage(_image!),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           gradient: LinearGradient(
                                             begin: Alignment.topCenter,
@@ -380,32 +460,34 @@ class _SignupPageState extends State<SignupPage> {
                                         height: 130,
                                         child: Center(
                                           child: Container(
-                                            child: IconButton(
-                                              onPressed: () {
-                                                showCustomDialog(context);
-                                              },
-                                              icon: GradientIcon(
-                                                Icons.camera_alt_outlined,
-                                                40.0,
-                                                LinearGradient(
-                                                  colors: <Color>[
-                                                    Color(0xFFFA0AFF),
-                                                    Color(0xFF28B6ED),
-                                                  ],
-                                                  begin: Alignment.center,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  showCustomDialog(context);
+                                                },
+                                                icon: GradientIcon(
+                                                  Icons.camera_alt_outlined,
+                                                  40.0,
+                                                  const LinearGradient(
+                                                    colors: <Color>[
+                                                      Color(0xFFFA0AFF),
+                                                      Color(0xFF28B6ED),
+                                                    ],
+                                                    begin: Alignment.center,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                             width: 125.0,
                                             height: 125.0,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Colors.white,
-                                              // image: DecorationImage(
-                                              //   fit: BoxFit.fill,
-                                              //   image: NetworkImage(
-                                              //       'https://i.stack.imgur.com/l60Hf.png') /*MemoryImage(_image!)*/,
-                                              // ),
+                                              image: DecorationImage(
+                                                // fit: BoxFit.fill,
+                                                image: AssetImage("assets/defaultProfile.jpg")/*MemoryImage(_image!)*/,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -484,7 +566,7 @@ class _SignupPageState extends State<SignupPage> {
                           textInputAction: TextInputAction.next,
                           validator: (value) {
                             RegExp regex = new RegExp(
-                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$(){}=+^%?/.,:;_&*~-]).{8,}$');
                             if (value!.isEmpty) {
                               return ("Password is must for signup");
                             }

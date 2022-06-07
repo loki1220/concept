@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concept/providers/user_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../model/users.dart';
@@ -17,8 +18,7 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  final TextEditingController commentEditingController =
-      TextEditingController();
+  final TextEditingController commentEditingController = TextEditingController();
 
   void postComment(String uid, String name, String profilePic) async {
     try {
@@ -123,6 +123,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     user.username,
                     user.photoUrl,
                   );
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(msg: "Posted");
                 },
                 child: Container(
                   padding:
