@@ -1,6 +1,11 @@
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../resources/auth_methods.dart';
+import 'login_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -12,6 +17,18 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
 
   Uint8List? _image;
+
+  final _auth = FirebaseAuth.instance;
+
+
+  void googleLogout() async {
+    await _auth.signOut();
+    await GoogleSignIn().signOut();
+    if (User != null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (c) => const LoginPage()));
+    }
+  }
 
 
   @override
@@ -260,12 +277,6 @@ class _SettingsPageState extends State<SettingsPage> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Color(0xFFF6E8F8),
-          // gradient: LinearGradient(
-          //   colors: <Color>[
-          //     Color(0xFF28B6ED),
-          //     Color(0xFFE063FF),
-          //   ],
-          // ),
         ),
         child: MaterialButton(
             onPressed: () {},
@@ -287,6 +298,50 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
 
+                ],
+              ),
+            )),
+      ),
+    );
+
+    final signOut = Material(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        width: 6 * MediaQuery.of(context).size.width / 7,
+        height: 40,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Color(0xFFF6E8F8),
+        ),
+        child: MaterialButton(
+            onPressed: () async {
+              await AuthMethods().signOut();
+              googleLogout();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            },
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.logout,
+                    color: Color(0xFF656565),
+                    size: 25,
+                  ),
+                  Text(
+                    "Logout",
+                    style: GoogleFonts.roboto(
+                      color: Color(0xFF000000),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ],
               ),
             )),
@@ -418,7 +473,7 @@ class _SettingsPageState extends State<SettingsPage> {
               alignment: Alignment.center,
               children: [
                 Container(
-                  height: 120,
+                  height: 170,
                   width: 6 * MediaQuery.of(context).size.width / 7,
                   child: Container(
                     decoration: BoxDecoration(
@@ -433,6 +488,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           contentPolicy,
                           termsofUse,
                           userAgree2,
+                          signOut,
                         ],
                       ),
                     ),
@@ -441,7 +497,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-
         ],
       ),
     );

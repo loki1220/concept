@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:concept/screens/uploading_screens/gallery.dart';
+import 'package:concept/screens/uploading_screens/image_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -8,9 +10,10 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'image_confirm.dart';
 
 class ImageEditor extends StatefulWidget {
-  const ImageEditor({Key? key, required this.imageFile}) : super(key: key);
+  const ImageEditor({Key? key, required this.imageFile, this.imageData}) : super(key: key);
 
    final Future<File?> imageFile;
+  final Uint8List? imageData;
 
 
 
@@ -53,9 +56,8 @@ class _ImageEditorState extends State<ImageEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         body: Column(
-      children: <Widget>[
+        children: <Widget>[
         const SizedBox(
           height: kToolbarHeight - 18,
         ),
@@ -174,7 +176,17 @@ class _ImageEditorState extends State<ImageEditor> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageFilterPage(
+                      imageFile: widget.imageFile,
+                      image: image, croppedImg: true,
+                    ),
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.exposure_outlined,
                 size: 24,

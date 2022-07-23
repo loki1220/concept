@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../widget/global_variables.dart';
 import '../widget/video_player_profile.dart';
 
@@ -23,7 +22,7 @@ class _Search_screenState extends State<Search_screen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -66,13 +65,13 @@ class _Search_screenState extends State<Search_screen> {
                         itemCount: (snapshot.data! as dynamic).docs.length,
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: () => Navigator.of(context).push(
+                            onTap: (){},/* => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => Profile_Screen(
                                   uid: (snapshot.data! as dynamic).docs[index]['uid'],
                                 ),
                               ),
-                            ),
+                            ),*/
                             child: ListTile(
                               leading: CircleAvatar(
                                 backgroundImage: NetworkImage(

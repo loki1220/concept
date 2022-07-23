@@ -1,7 +1,6 @@
 import 'package:concept/widget/utils.dart';
 import 'package:concept/widget/video_player_feed.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +25,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  List<WordPair> pics = generateWordPairs().take(5).toList();
+  // List<WordPair> pics = generateWordPairs().take(5).toList();
 
 
   VideoPlayerController? _controller;
@@ -47,13 +46,13 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
-  Future<void> _pullRefresh() async {
-    List<model.User> freshPosts = await WordDataSource().getFutureWords(delay: 2);
-    setState(() {
-      pics = freshPosts;
-    });
-    // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
-  }
+  // Future<void> _pullRefresh() async {
+  //   List<model.User> freshPosts = await WordDataSource().getFutureWords(delay: 2);
+  //   setState(() {
+  //     pics = freshPosts;
+  //   });
+  //   // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
+  // }
 
 
 
@@ -62,9 +61,9 @@ class _PostCardState extends State<PostCard> {
     final model.User user = Provider.of<UserProvider>(context).getUser;
     // final width = MediaQuery.of(context).size.width;
 
-    return RefreshIndicator(
+    return /*RefreshIndicator(
       onRefresh: _pullRefresh,
-      child: Column(
+      child:*/ Column(
         children: [
           // HEADER SECTION OF THE POST
           Container(
@@ -94,7 +93,7 @@ class _PostCardState extends State<PostCard> {
                           style: GoogleFonts.roboto(
                             fontWeight: FontWeight.w500,
                             fontSize: 15.93,
-                            color: Color(0xFF000000),
+                            color: const Color(0xFF000000),
                           ),
                         ),
                       ],
@@ -376,8 +375,8 @@ class _PostCardState extends State<PostCard> {
             ),
           )
         ],
-      ),
-    );
+      );
+
   }
 }
 

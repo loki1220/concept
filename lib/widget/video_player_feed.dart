@@ -26,72 +26,91 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   //     });
   // }
 
+   // @override
+   // void initState() {
+   //   videoPlayerController = VideoPlayerController.network(
+   //       widget.videoUrl);
+   //   _initializeVideoPlayerFuture = videoPlayerController.initialize();
+   //   videoPlayerController.setLooping(true);
+   //   videoPlayerController.setVolume(1.0);
+   //   super.initState();
+   // }
+
    @override
    void initState() {
-     videoPlayerController = VideoPlayerController.network(
-         widget.videoUrl);
-     _initializeVideoPlayerFuture = videoPlayerController.initialize();
-     videoPlayerController.setLooping(true);
-     videoPlayerController.setVolume(1.0);
-     super.initState();
+     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+         ..addListener(() =>setState(() {}))
+         ..setLooping(true)
+         ..initialize().then((value) => videoPlayerController.play());
    }
 
   @override
   void dispose() {
-    super.dispose();
     videoPlayerController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Stack(
-      children: [
-        Container(
-          width: size.width,
-          height: size.height,
-          decoration: const BoxDecoration(
-            color: Colors.black,
-          ),
-          child: FutureBuilder(
-            future: _initializeVideoPlayerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return AspectRatio(
-                  aspectRatio: videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(videoPlayerController),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(backgroundColor: Colors.orange,
-                  ),
-                );
-              }
-          }
-          ),
-        ),
-        Center(
-          child: IconButton(
-            onPressed: (){
-              setState(() {
-                // If the video is playing, pause it.
-                if (videoPlayerController.value.isPlaying) {
-                  videoPlayerController.pause();
-                } else {
-                  // If the video is paused, play it.
-                  videoPlayerController.play();
-                }
-              });
-            },
-            icon: Icon(
-              videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: const Color(0xFFFFFFFF),
-            ),
-          ),
-        ),
-      ],
+    // return Stack(
+    //   children: [
+    //     Container(
+    //       width: size.width,
+    //       height: size.height,
+    //       decoration: const BoxDecoration(
+    //         color: Colors.black,
+    //       ),
+    //       child: FutureBuilder(
+    //         future: _initializeVideoPlayerFuture,
+    //         builder: (context, snapshot) {
+    //           if (snapshot.connectionState == ConnectionState.done) {
+    //             return AspectRatio(
+    //               aspectRatio: videoPlayerController.value.aspectRatio,
+    //               child: VideoPlayer(videoPlayerController),
+    //             );
+    //           }
+    //           else {
+    //             return
+    //               const Center(
+    //               child: CircularProgressIndicator(backgroundColor: Colors.orange,
+    //               ),
+    //             );
+    //           }
+    //       }
+    //       ),
+    //     ),
+    //     Center(
+    //       child: IconButton(
+    //         onPressed: (){
+    //           setState(() {
+    //             // If the video is playing, pause it.
+    //             if (videoPlayerController.value.isPlaying) {
+    //               videoPlayerController.pause();
+    //             } else {
+    //               // If the video is paused, play it.
+    //               videoPlayerController.play();
+    //             }
+    //           });
+    //         },
+    //         icon: Icon(
+    //           videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+    //           color: const Color(0xFFFFFFFF),
+    //         ),
+    //       ),
+    //     ),
+    //   ],
+    // );
+    return Container(
+      width: size.width,
+      height: size.height,
+      decoration: const BoxDecoration(
+        color: Colors.black,
+      ),
+      child: VideoPlayer(videoPlayerController),
     );
+
   }
 }
 

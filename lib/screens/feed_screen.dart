@@ -311,7 +311,10 @@ class _FeedScreenState extends State<FeedScreen> {
 
 
   Future<void>_loadResources(bool reload) async{
-    await Get.find<ProductController>().getReco
+    setState(() {
+
+    });
+    // await Get.find<ProductController>().getReco
   }
 
   @override
@@ -358,8 +361,10 @@ class _FeedScreenState extends State<FeedScreen> {
           ],
         ),
         body: RefreshIndicator(
+          color: Colors.purpleAccent,
           onRefresh: () async{
            await _loadResources(true);
+
           },
           child: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('posts').orderBy("datePublished", descending: true).snapshots(),
@@ -367,7 +372,11 @@ class _FeedScreenState extends State<FeedScreen> {
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: Color(0XFF28B6ED),
+                    backgroundColor: Color(0XFFFA0AFF),
+
+                  ),
                 );
               }
               return ListView.builder(

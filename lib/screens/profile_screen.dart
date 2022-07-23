@@ -10,6 +10,8 @@ class Profile_Screen extends StatefulWidget {
   final String? uid;
   const Profile_Screen({Key? key, this.uid}) : super(key: key);
 
+
+
   @override
   State<Profile_Screen> createState() => _Profile_ScreenState();
 }
@@ -204,8 +206,8 @@ class _Profile_ScreenState extends State<Profile_Screen> with SingleTickerProvid
                 padding: const EdgeInsets.symmetric(vertical: 18.0),
                 child: Column(
                   children: [
-                    Text("Lokesh"),
-                    Text("Math worm\n Probability enthu",
+                    Text("Name"),
+                    Text("Bio",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.roboto(
                       color: Colors.black.withOpacity(0.4),

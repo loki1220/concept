@@ -338,7 +338,7 @@ class GalleryState extends State<Gallery> {
           ],
         ),
       );
-  }
+}
 
   cropImage()async{
     File? croppedFile = await ImageCropper().cropImage(

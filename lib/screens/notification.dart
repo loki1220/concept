@@ -17,38 +17,38 @@ class _NotificationScreenState extends State<NotificationScreen> {
   final _auth = FirebaseAuth.instance;
 
 
-  void googleLogout() async {
-    await _auth.signOut();
-    await GoogleSignIn().signOut();
-    if (User != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (c) => LoginPage()));
-    }
-  }
+  // void googleLogout() async {
+  //   await _auth.signOut();
+  //   await GoogleSignIn().signOut();
+  //   if (User != null) {
+  //     Navigator.pushReplacement(
+  //         context, MaterialPageRoute(builder: (c) => LoginPage()));
+  //   }
+  // }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextButton(
-          child: Text(
-            "Sign Out",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          onPressed: () async {
-            await AuthMethods().signOut();
-            googleLogout();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const LoginPage(),
-              ),
-            );
-          },
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: TextButton(
+      //     child: Text(
+      //       "Sign Out",
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //       ),
+      //     ),
+      //     onPressed: () async {
+      //       await AuthMethods().signOut();
+      //       googleLogout();
+      //       Navigator.of(context).pushReplacement(
+      //         MaterialPageRoute(
+      //           builder: (context) => const LoginPage(),
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // ),
     );
   }
 }
