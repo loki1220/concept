@@ -367,19 +367,6 @@ class _ImageConfirmScreenState extends State<ImageConfirmScreen> {
                               },
                             ),
                           ),
-
-
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(8.0),
-                          //     image: DecorationImage(
-                          //       fit: BoxFit.fill,
-                          //       alignment: FractionalOffset.topCenter,
-                          //       image: AssetImage(
-                          //           "assets/editing.png") /*MemoryImage(_file!)*/,
-                          //     ),
-                          //   ),
-                          // ),
                         ),
                       ),
                     ],
